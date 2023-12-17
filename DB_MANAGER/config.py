@@ -1,0 +1,2 @@
+DB = 'sqlite:///example.db'
+
