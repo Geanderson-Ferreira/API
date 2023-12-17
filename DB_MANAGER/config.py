@@ -1,2 +1,1 @@
 DB = 'sqlite:///example.db'
-

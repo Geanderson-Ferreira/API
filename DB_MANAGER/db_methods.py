@@ -1,12 +1,12 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import declarative_base
-from models import User, Hotels, OrderTypes, OrderStatus
+from models import Locations, User, Hotels, OrderTypes, OrderStatus
 from config import DB
 
 def create_user_example():
 
-    Base = declarative_base()
+    #Base = declarative_base()
     engine = create_engine(DB)
 
     Session = sessionmaker(bind=engine)
@@ -30,15 +30,20 @@ def create_user_example():
 
 
 def create_hotel_example():
-    icb = Hotels(
+    hotel1 = Hotels(
         HotelName = 'Ibis Carlos Barbosa'
     )
+
+    hotel2 = Hotels(
+        HotelName = 'Ibis Porto Alegre Aeroporto'
+    )
+
 
     engine = create_engine(DB)
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    session.add(icb)
+    session.add_all([hotel1, hotel2])
     session.commit()
     session.close()
     
@@ -78,4 +83,35 @@ def insert_default_values_in_order_status():
         session.commit()
         session.close()
 
-insert_default_values_in_order_status()
+
+def insert_default_values_in_locations():
+
+        local1 = Locations(
+             LocationType = 'Quarto',
+             LocationName = '752',
+             Floor = 7,
+             HotelId = 2
+        )
+
+        local2 = Locations(
+             LocationType = 'Quarto',
+             LocationName = '252',
+             Floor = 7,
+             HotelId = 1
+        )
+        local3 = Locations(
+             LocationType = 'Area Social',
+             LocationName = 'Banheiro Masculino Social',
+             Floor = 0,
+             HotelId = 2
+        )
+
+        engine = create_engine(DB)
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        session.add_all([local1, local2, local3])
+        session.commit()
+        session.close()
+        
+insert_default_values_in_locations()
