@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import relationship
@@ -40,6 +40,7 @@ class Orders(Base):
     CreationDate = Column(DateTime)
     EndDate = Column(DateTime)
     OrderType = Column(Integer, ForeignKey('order_types.IDTypeOrder'))
+    ImageData = Column(LargeBinary)
     Description = Column(String)
     CreatedBy = Column(Integer, ForeignKey('users.Id'))
     Status = Column(Integer, ForeignKey('order_status.IdStatus'), default='Pendente')

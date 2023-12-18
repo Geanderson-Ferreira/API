@@ -1,5 +1,5 @@
 from models import create_all
-from db_methods import insert_default_values_in_locations, create_hotel_example, create_user_example, insert_default_values_in_order_types, insert_default_values_in_order_status
+from db_methods import insert_order_with_image, insert_default_values_in_locations, create_hotel_example, create_user_example, insert_default_values_in_order_types, insert_default_values_in_order_status
 from sys import argv
 import os
 
@@ -10,6 +10,9 @@ import os
 
 
 def recreate_db():
+
+    IMG = '/home/gean/Documents/Things/app1/DB_MANAGER/DALL·E 2023-07-04 01.04.56 - a dark grey minimalist draw world map.png'
+    
     #Criar as tabelas
     try:
         os.remove('example.db')
@@ -21,6 +24,7 @@ def recreate_db():
     insert_default_values_in_order_types()
     insert_default_values_in_order_status()
     insert_default_values_in_locations()
+    insert_order_with_image(location_id=1, order_type_id=1, description='Descrição da ordem', created_by_id=1, status_id=1, image_path=IMG)
 
 
 funcoes_argvs = {
