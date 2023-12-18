@@ -4,6 +4,11 @@ from sys import argv
 import os
 
 
+
+
+
+
+
 def recreate_db():
     #Criar as tabelas
     try:

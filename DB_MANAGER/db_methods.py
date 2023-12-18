@@ -28,7 +28,6 @@ def create_user_example():
     session.commit()
     session.close()
 
-
 def create_hotel_example():
     hotel1 = Hotels(
         HotelName = 'Ibis Carlos Barbosa'
@@ -83,7 +82,6 @@ def insert_default_values_in_order_status():
         session.commit()
         session.close()
 
-
 def insert_default_values_in_locations():
 
         local1 = Locations(
@@ -106,12 +104,32 @@ def insert_default_values_in_locations():
              HotelId = 2
         )
 
+        local4 = Locations(
+             LocationType = 'Quarto',
+             LocationName = '259',
+             Floor = 2,
+             HotelId = 2
+        )
+
+        local5 = Locations(
+             LocationType = 'Quarto',
+             LocationName = '666',
+             Floor = 6,
+             HotelId = 1
+        )
+        local6 = Locations(
+             LocationType = 'Area Social',
+             LocationName = 'Banheiro Feminino Social',
+             Floor = 0,
+             HotelId = 2
+        )
+
+
+
         engine = create_engine(DB)
         Session = sessionmaker(bind=engine)
         session = Session()
 
-        session.add_all([local1, local2, local3])
+        session.add_all([local1, local2, local3, local4, local5, local6])
         session.commit()
         session.close()
-        
-insert_default_values_in_locations()
