@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import declarative_base
-from config import DB
+from DB_MANAGER.config import DB
 from datetime import datetime
 
 Base = declarative_base()
@@ -40,7 +40,7 @@ class Orders(Base):
     CreationDate = Column(DateTime)
     EndDate = Column(DateTime)
     OrderType = Column(Integer, ForeignKey('order_types.IDTypeOrder'))
-    ImageData = Column(LargeBinary)
+    ImageData = Column(LargeBinary, nullable=True)
     Description = Column(String)
     CreatedBy = Column(Integer, ForeignKey('users.Id'))
     Status = Column(Integer, ForeignKey('order_status.IdStatus'), default='Pendente')

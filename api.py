@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Query
 from pydantic import BaseModel
 from typing import Optional
+from DB_MANAGER.methods import get_orders_as_json
 
 class Order(BaseModel):
     IdOrder: Optional[int]
@@ -15,9 +16,46 @@ class Order(BaseModel):
 
 app = FastAPI()
 
-@app.get('/')
+@app.get('/list-orders-demo')
 def stated():
-    return 'API ACESSADA'
+    return {
+  "orders": [
+    {
+      "IdOrder": 1,
+      "Location": 101,
+      "CreationDate": "2023-01-15T10:30:00",
+      "EndDate": "2023-01-20T15:45:00",
+      "OrderType": 1,
+      "Description": "Manutenção na TV",
+      "CreatedBy": 201,
+      "Status": "Pending",
+      "ImageData": 'null'
+    },
+    {
+      "IdOrder": 2,
+      "Location": 102,
+      "CreationDate": "2023-01-18T12:15:00",
+      "EndDate": 'null',
+      "OrderType": 2,
+      "Description": "Conserto do Ar Condicionado",
+      "CreatedBy": 202,
+      "Status": "In Progress",
+      "ImageData": 'null'
+    },
+    {
+      "IdOrder": 3,
+      "Location": 103,
+      "CreationDate": "2023-01-20T14:00:00",
+      "EndDate": "2023-01-22T16:30:00",
+      "OrderType": 3,
+      "Description": "Troca de Lâmpadas",
+      "CreatedBy": 203,
+      "Status": "Completed",
+      "ImageData": 'null'
+    }
+  ]
+}
+
 
 @app.get('/api/list-orders/')
 def list_orders(
@@ -42,7 +80,8 @@ def list_orders(
         CreatedBy=CreatedBy,
         Status=Status
     )
-    return order
+    return get_orders_as_json(order)
+
 
 @app.get('/api/get-order/')
 def get_order():

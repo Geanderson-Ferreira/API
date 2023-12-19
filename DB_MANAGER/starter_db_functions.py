@@ -1,8 +1,10 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm import declarative_base
 from models import Orders, Locations, User, Hotels, OrderTypes, OrderStatus
 from config import DB
+from datetime import datetime
+import base64
+
 
 def create_user_example():
 
@@ -134,19 +136,17 @@ def insert_default_values_in_locations():
         session.commit()
         session.close()
 
-
-from datetime import datetime
-from datetime import datetime
-import base64
-
 def insert_order_with_image(location_id, order_type_id, description, created_by_id, status_id, image_path):
     engine = create_engine(DB)
     Session = sessionmaker(bind=engine)
     session = Session()
 
     # Lê os dados binários da imagem
-    with open(image_path, 'rb') as image_file:
-        image_data = base64.b64encode(image_file.read())
+    if image_path != None:
+        with open(image_path, 'rb') as image_file:
+            image_data = base64.b64encode(image_file.read())
+    
+    image_data = None
 
     order = Orders(
         Location=location_id,
