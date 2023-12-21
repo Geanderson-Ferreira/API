@@ -20,10 +20,10 @@ def recreate_db():
     insert_default_values_in_order_status()
     insert_default_values_in_locations()
     insert_order_with_image(location_id=1, order_type_id=1, description='Asserehe', created_by_id=1, status_id=1, image_path=None)
-    #insert_order_with_image(location_id=1, order_type_id=1, description='Hadehe', created_by_id=1, status_id=1, image_path=IMG)
-    #insert_order_with_image(location_id=1, order_type_id=1, description='TesteDescricao', created_by_id=1, status_id=1, image_path=IMG)
-    #insert_order_with_image(location_id=1, order_type_id=1, description='Culpa da Accor', created_by_id=1, status_id=1, image_path=IMG)
-    #insert_order_with_image(location_id=1, order_type_id=1, description='Linus Torvalds', created_by_id=1, status_id=1, image_path=IMG)
+    insert_order_with_image(location_id=1, order_type_id=1, description='Hadehe', created_by_id=1, status_id=1, image_path=None)
+    insert_order_with_image(location_id=1, order_type_id=1, description='TesteDescricao', created_by_id=1, status_id=1, image_path=None)
+    insert_order_with_image(location_id=1, order_type_id=1, description='Culpa da Accor', created_by_id=1, status_id=1, image_path=None)
+    insert_order_with_image(location_id=1, order_type_id=1, description='Linus Torvalds', created_by_id=1, status_id=1, image_path=None)
 
 funcoes_argvs = {
     'recreate_db' : recreate_db

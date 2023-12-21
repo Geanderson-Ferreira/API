@@ -1,35 +1,94 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Query
-from DB_MANAGER.models import Orders
+from DB_MANAGER.models import Orders, Locations
 from DB_MANAGER.config import DB
 import json
+import os
+from sqlalchemy.ext.declarative import DeclarativeMeta
+from sqlalchemy.orm.state import InstanceState
 
-def get_orders_as_json(order_filter):
-    engine = create_engine(DB)
-    Session = sessionmaker(bind=engine)
+os.system('clear')
 
-    with Session() as session:
-        # Constrói a consulta base
-        query = session.query(Orders)
+def alchemyencoder(obj):
+    if isinstance(obj.__class__, DeclarativeMeta):
+        # an SQLAlchemy class
+        fields = {}
+        for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
+            data = obj.__getattribute__(field)
+            try:
+                # this will fail on non-encodable values, like other classes
+                json.dumps(data)
+                fields[field] = data
+            except TypeError:
+                # reverting to a representation
+                fields[field] = str(data)
+        # a json-encodable dict
+        return fields
 
-        # Adiciona condições de filtro se os parâmetros foram fornecidos
-        if order_filter.IdOrder is not None:
-            query = query.filter(Orders.IdOrder == order_filter.IdOrder)
-        if order_filter.Location is not None:
-            query = query.filter(Orders.Location == order_filter.Location)
-        if order_filter.CreationDate is not None:
-            query = query.filter(Orders.CreationDate == order_filter.CreationDate)
-        # Adicione mais condições de filtro conforme necessário para outros campos
+    if isinstance(obj, InstanceState):
+        # an SQLAlchemy InstanceState
+        return None
 
-        # Executa a consulta e converte os resultados para uma lista de dicionários
-        records_list = [record.__dict__ for record in query.all()]
+def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_type=None,created_by=None,status=None):
 
-        # Remove a chave "_sa_instance_state" que não é necessária
-        for record in records_list:
-            record.pop('_sa_instance_state', None)
+    engine = create_engine(DB, echo=True)
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
 
-        # Converte a lista de dicionários para JSON
-        records_json = json.dumps(records_list)
+    query = session.query(Orders)
 
-    return records_json
+    if id is not None:
+        query = query.filter(Orders.IdOrder==id)
+
+    if location is not None:
+        query = query.filter(Orders.Location==location)
+    
+    if creation_date is not None:
+        query = query.filter(Orders.CreationDate==creation_date)
+    
+    if end_date is not None:
+        query = query.filter(Orders.EndDate==end_date)
+    
+    if order_type is not None:
+        query = query.filter(Orders.OrderType==order_type)
+    
+    if created_by is not None:
+        query = query.filter(Orders.CreatedBy==created_by)
+    
+    if status is not None:
+        query = query.filter(Orders.Status==status)
+
+    list_of_orders = list()
+
+    for instance in query:
+        list_of_orders.append(instance)
+    
+    list_of_json = [record.__dict__ for record in list_of_orders]
+    return json.dumps(list_of_json, default=alchemyencoder)
+
+def queryLocations(location_type=None, floor=None, hotel_id=None, location_id=None):
+
+    engine = create_engine(DB, echo=True)
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
+
+    query = session.query(Locations)
+
+    if location_type is not None:
+        query = query.filter(Locations.LocationType==location_type)
+    if floor is not None:
+        query = query.filter(Locations.Floor==floor)
+    if hotel_id is not None:
+        query = query.filter(Locations.Hotel==floor)
+    if location_id is not None:
+        query = query.filter(Locations.IDLocation==location_id)
+
+    list_of_orders = list()
+
+    for instance in query:
+        list_of_orders.append(instance)
+    
+    list_of_json = [record.__dict__ for record in list_of_orders]
+    return json.dumps(list_of_json, default=alchemyencoder)
