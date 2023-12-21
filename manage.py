@@ -28,5 +28,9 @@ funcoes_argvs = {
     'recreate_db' : recreate_db
 }
 
-if argv[1] in funcoes_argvs.keys():
-    funcoes_argvs[argv[1]]()
+def run_arguments():
+    for i in argv:
+        if i in funcoes_argvs.keys():
+            funcoes_argvs[argv[1]]()
+
+run_arguments()

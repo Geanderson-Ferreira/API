@@ -29,7 +29,7 @@ def list_locations(HotelId: Optional[int] = Query(None, alias='hotel'),
                    Floor: Optional[int] = Query(None, alias='floor'),
                    LocationId:Optional[int] = Query(None, alias='LocationId'),
                    ):
-    
+
     # !Fazer o check se o usuario tem acesso ao hotel todo
 
     return queryLocations(location_type=LocationType, floor=Floor, hotel_id=HotelId, location_id=LocationId)
