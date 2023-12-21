@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Orders, Locations, User, Hotels, OrderTypes, OrderStatus
-from config import DB
+from DB_MANAGER.models import Orders, Locations, User, Hotels, OrderTypes, OrderStatus
+from DB_MANAGER.config import DB
 from datetime import datetime
 import base64
 

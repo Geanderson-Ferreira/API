@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import declarative_base
 from DB_MANAGER.config import DB
@@ -8,15 +7,12 @@ from datetime import datetime
 
 Base = declarative_base()
 
-
 class Hotels(Base):
     __tablename__ = 'hotels'
 
     HotelId = Column(Integer, primary_key=True, autoincrement=True)
     HotelName = Column(String, unique=True, nullable=False)
-
-    # Define as relações
-    locations = relationship('Locations', back_populates='hotel')
+    locations = relationship('Locations', back_populates='Hotel')
 
 
 class Locations(Base):
@@ -27,10 +23,8 @@ class Locations(Base):
     LocationName = Column(String, nullable=False)
     Floor = Column(Integer, nullable=False)
     HotelId = Column(Integer, ForeignKey('hotels.HotelId'))
-
-    # Define as relações
     orders = relationship('Orders', back_populates='location')
-    hotel = relationship('Hotels')
+    Hotel = relationship('Hotels')
 
 class Orders(Base):
     __tablename__ = 'orders'
@@ -44,8 +38,7 @@ class Orders(Base):
     Description = Column(String)
     CreatedBy = Column(Integer, ForeignKey('users.Id'))
     Status = Column(Integer, ForeignKey('order_status.IdStatus'), default='Pendente')
-
-    # Define as relações
+    HotelId = Column(Integer, ForeignKey('hotels.HotelId'))
     location = relationship('Locations', back_populates='orders')
     order_type = relationship('OrderTypes', back_populates='orders')
     created_by = relationship('User')
@@ -60,7 +53,6 @@ class User(Base):
     FullName = Column(String)
     Email = Column(String, unique=True, nullable=False)
     CreatedAt = Column(DateTime, default=datetime.utcnow)
-    # Define as relações
     orders = relationship('Orders', back_populates='created_by')
 
 class OrderTypes(Base):
@@ -68,8 +60,6 @@ class OrderTypes(Base):
 
     IDTypeOrder = Column(Integer, primary_key=True)
     OrderTypeName = Column(String, unique=True, nullable=False)
-
-    # Define as relações
     orders = relationship('Orders', back_populates='order_type')
 
 class OrderStatus(Base):
@@ -77,9 +67,6 @@ class OrderStatus(Base):
 
     IdStatus = Column(Integer, primary_key=True)
     StatusName = Column(String, unique=True, nullable=False)
-
-
-    # Define as relações
     orders = relationship('Orders', back_populates='status')
 
 
