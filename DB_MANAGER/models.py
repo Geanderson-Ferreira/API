@@ -2,8 +2,9 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinar
 from sqlalchemy import create_engine
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import declarative_base
-from DB_MANAGER.config import DB
+from DB_MANAGER.config import DB, DB_NAME
 from datetime import datetime
+import os
 
 Base = declarative_base()
 
@@ -76,3 +77,12 @@ def create_all():
         Base.metadata.create_all(engine)
     except:
         pass
+
+def recreate_db():
+    #Criar as tabelas
+    try:
+        os.remove(DB_NAME)
+    except:
+        pass
+    create_all()
+    print('>> DB+TABELAS RECRIADOS')

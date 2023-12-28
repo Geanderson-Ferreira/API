@@ -3,11 +3,9 @@ from sqlalchemy import create_engine
 from DB_MANAGER.models import Orders, Locations
 from DB_MANAGER.config import DB
 import json
-import os
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm.state import InstanceState
 
-os.system('clear')
 
 def alchemyencoder(obj):
     if isinstance(obj.__class__, DeclarativeMeta):
@@ -92,3 +90,19 @@ def queryLocations(location_type=None, floor=None, hotel_id=None, location_id=No
     
     list_of_json = [record.__dict__ for record in list_of_orders]
     return json.dumps(list_of_json, default=alchemyencoder)
+
+
+
+def queryOrdersSummarized():
+    from sqlalchemy import func
+    engine = create_engine(DB)
+    Session = sessionmaker()
+    Session.configure(bind=engine)
+    session = Session()
+# Supondo que você tenha uma sessão do SQLAlchemy chamada 'session'
+    result = session.query(Orders.OrderType, func.count().label('total_orders'))
+    result.group_by(Orders.OrderType).all()
+    print(result)
+    for row in result:
+        order_type, total_orders = row
+        print(f"Order Type {order_type}: {total_orders} orders")
