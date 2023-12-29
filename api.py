@@ -1,8 +1,17 @@
 from fastapi import FastAPI, Query
 from typing import Optional
-from DB_MANAGER.methods import queryOrders, queryLocations
+from DB_MANAGER.methods import queryOrders, queryLocations, queryOrders2
+
+#Para rodar a API, esteja no mesmo diretorio desde arquivo e rodar:
+#>> uvicorn api:app
+#>> uvicorn api:app --host 10.0.0.102 --port 8000 --reload
 
 app = FastAPI()
+
+@app.get('/api/test')
+def teste():
+    return queryOrders2()
+
 
 @app.get('/api/list-orders/')
 def list_orders(

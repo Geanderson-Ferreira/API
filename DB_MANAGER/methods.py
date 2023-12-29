@@ -1,40 +1,31 @@
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
-from DB_MANAGER.models import Orders, Locations
+from sqlalchemy.orm import sessionmaker, joinedload
+from sqlalchemy import create_engine, select
+from DB_MANAGER.models import Base, Orders, Locations, OrderStatus, OrderTypes, User
 from DB_MANAGER.config import DB
 import json
 from sqlalchemy.ext.declarative import DeclarativeMeta
 from sqlalchemy.orm.state import InstanceState
 
-
-def alchemyencoder(obj):
-    if isinstance(obj.__class__, DeclarativeMeta):
-        # an SQLAlchemy class
-        fields = {}
-        for field in [x for x in dir(obj) if not x.startswith('_') and x != 'metadata']:
-            data = obj.__getattribute__(field)
-            try:
-                # this will fail on non-encodable values, like other classes
-                json.dumps(data)
-                fields[field] = data
-            except TypeError:
-                # reverting to a representation
-                fields[field] = str(data)
-        # a json-encodable dict
-        return fields
-
-    if isinstance(obj, InstanceState):
-        # an SQLAlchemy InstanceState
-        return None
-
 def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_type=None,created_by=None,status=None):
 
-    engine = create_engine(DB, echo=True)
+    engine = create_engine(DB)
     Session = sessionmaker()
     Session.configure(bind=engine)
     session = Session()
-
-    query = session.query(Orders)
+    
+    query = (
+        session.query(Orders, Locations.LocationName, User.Username, OrderStatus.StatusName)
+        .join(Locations, Orders.Location == Locations.IDLocation)
+        .join(OrderTypes)
+        .join(User)
+        .join(OrderStatus)
+        .options(
+            joinedload(Orders.location),
+            joinedload(Orders.order_type),
+            joinedload(Orders.created_by),
+            joinedload(Orders.status)
+        )
+    )
 
     if id is not None:
         query = query.filter(Orders.IdOrder==id)
@@ -56,42 +47,91 @@ def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_typ
     
     if status is not None:
         query = query.filter(Orders.Status==status)
-
-    list_of_orders = list()
-
-    for instance in query:
-        list_of_orders.append(instance)
     
-    list_of_json = [record.__dict__ for record in list_of_orders]
-    return json.dumps(list_of_json, default=alchemyencoder)
+    serialized_result = list()
 
-def queryLocations(location_type=None, floor=None, hotel_id=None, location_id=None):
+    for order, local, nome, status in query:
 
-    engine = create_engine(DB, echo=True)
+        serialized_order = {
+            'IdOrder': order.IdOrder,
+            'Description': order.Description,
+            'Status': status,
+            'CreatedBy': nome,
+            'Location': local
+        }
+
+        serialized_result.append(serialized_order)
+
+    return serialized_result
+
+def queryOrders2(id=None,location=None,creation_date=None,end_date=None,order_type=None,created_by=None,status=None):
+
+    engine = create_engine(DB)
     Session = sessionmaker()
     Session.configure(bind=engine)
     session = Session()
 
-    query = session.query(Locations)
+    result = (
+        session.query(Orders, Locations.LocationName, User.Username, OrderStatus.StatusName)
+        .join(Locations, Orders.Location == Locations.IDLocation)
+        .join(OrderTypes)
+        .join(User)
+        .join(OrderStatus)
+        .options(
+            joinedload(Orders.location),
+            joinedload(Orders.order_type),
+            joinedload(Orders.created_by),
+            joinedload(Orders.status)
+        )
+        
+    )
 
-    if location_type is not None:
-        query = query.filter(Locations.LocationType==location_type)
-    if floor is not None:
-        query = query.filter(Locations.Floor==floor)
-    if hotel_id is not None:
-        query = query.filter(Locations.Hotel==floor)
-    if location_id is not None:
-        query = query.filter(Locations.IDLocation==location_id)
+    result = result.filter(Orders.IdOrder>2).all()
 
-    list_of_orders = list()
+    serialized_result = list()
 
-    for instance in query:
-        list_of_orders.append(instance)
-    
-    list_of_json = [record.__dict__ for record in list_of_orders]
-    return json.dumps(list_of_json, default=alchemyencoder)
+    for order, local, nome, status in result:
+
+        serialized_order = {
+            'IdOrder': order.IdOrder,
+            'Description': order.Description,
+            'Status': status,
+            'CreatedBy': nome,
+            'Location': local
+        }
+
+        serialized_result.append(serialized_order)
+
+    return serialized_result
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def queryLocations(location_type=None, floor=None, hotel_id=None, location_id=None):
+
+    return [{'valor' : 'funcao nao implementada ainda'}]
 
 def queryOrdersSummarized():
     from sqlalchemy import func
@@ -106,3 +146,4 @@ def queryOrdersSummarized():
     for row in result:
         order_type, total_orders = row
         print(f"Order Type {order_type}: {total_orders} orders")
+

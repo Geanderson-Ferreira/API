@@ -1,10 +1,9 @@
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey, LargeBinary
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, Session
+from sqlalchemy.orm import Session
 from datetime import datetime
 from DB_MANAGER.models import *
 from DB_MANAGER.config import DB
-
 
 #Funcao que popula o Banco
 def populate():
@@ -77,7 +76,6 @@ def populate():
         {"StatusName": "A Bloquear"},
         {"StatusName": "Finalizado"},
     ]
-
 
 #Insere os dados
     try:
