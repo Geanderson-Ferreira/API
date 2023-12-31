@@ -1,10 +1,7 @@
 from sqlalchemy.orm import sessionmaker, joinedload
-from sqlalchemy import create_engine, select
-from DB_MANAGER.models import Base, Orders, Locations, OrderStatus, OrderTypes, User
+from sqlalchemy import create_engine, func
+from DB_MANAGER.models import Orders, Locations, OrderStatus, OrderTypes, User
 from DB_MANAGER.config import DB
-import json
-from sqlalchemy.ext.declarative import DeclarativeMeta
-from sqlalchemy.orm.state import InstanceState
 
 def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_type=None,created_by=None,status=None):
 
@@ -70,44 +67,26 @@ def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_typ
     return serialized_result
 
 
+def queryOrdersSummarized():
 
+    engine = create_engine(DB)
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
+    order_counts = (
+        session.query(OrderTypes.OrderTypeName, func.count(Orders.IdOrder))
+            .join(Orders, OrderTypes.IDTypeOrder == Orders.OrderType)
+            .filter(Orders.Status == 2)
+            .group_by(OrderTypes.OrderTypeName)
+                .all()
+    )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # Criando um dicionário para armazenar os resultados
+    return {"order_counts": [{"OrderTypeName": order_type, "Count": count} for order_type, count in order_counts]}
 
 
 
 def queryLocations(location_type=None, floor=None, hotel_id=None, location_id=None):
 
     return [{'valor' : 'funcao nao implementada ainda'}]
-
-def queryOrdersSummarized():
-    from sqlalchemy import func
-    engine = create_engine(DB)
-    Session = sessionmaker()
-    Session.configure(bind=engine)
-    session = Session()
-# Supondo que você tenha uma sessão do SQLAlchemy chamada 'session'
-    result = session.query(Orders.OrderType, func.count().label('total_orders'))
-    result.group_by(Orders.OrderType).all()
-    print(result)
-    for row in result:
-        order_type, total_orders = row
-        print(f"Order Type {order_type}: {total_orders} orders")
 
