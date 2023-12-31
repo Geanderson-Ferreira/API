@@ -2,6 +2,10 @@ from sqlalchemy.orm import sessionmaker, joinedload
 from sqlalchemy import create_engine, func
 from DB_MANAGER.models import Orders, Locations, OrderStatus, OrderTypes, User
 from DB_MANAGER.config import DB
+from datetime import datetime
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import Session
+
 
 def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_type=None,created_by=None,status=None):
 
@@ -84,9 +88,18 @@ def queryOrdersSummarized():
     # Criando um dicionário para armazenar os resultados
     return {"order_counts": [{"OrderTypeName": order_type, "Count": count} for order_type, count in order_counts]}
 
+def insertNewOrder(location=None, description=None, order_type=None,created_by=None,status=None, hotel_id=None):
 
+    Base = declarative_base()
+    engine = create_engine(DB, echo=False)
+    Base.metadata.create_all(engine)
+    session = Session(engine)
 
-def queryLocations(location_type=None, floor=None, hotel_id=None, location_id=None):
+    data_to_insert = {"Location": location, "CreationDate": datetime.utcnow(), "EndDate": None, "OrderType": order_type,
+        "ImageData": b"sample_image_data", "Description": description, "CreatedBy": created_by, "Status": status, "HotelId": hotel_id}
+    
+    session.add(Orders(**data_to_insert))
+    session.commit()
+    session.close()
 
-    return [{'valor' : 'funcao nao implementada ainda'}]
-
+    return data_to_insert

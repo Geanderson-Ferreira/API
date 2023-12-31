@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Query
 from typing import Optional
-from DB_MANAGER.methods import queryOrders, queryLocations, queryOrdersSummarized
+from DB_MANAGER.methods import queryOrders, queryOrdersSummarized, insertNewOrder
 
 #Para rodar a API, esteja no mesmo diretorio desde arquivo e rodar:
 #>> uvicorn api:app
@@ -32,14 +32,19 @@ def list_orders(
 def orders_types_summarizeds():
     return queryOrdersSummarized()
 
-
-@app.get('/api/list-locations/')
-def list_locations(HotelId: Optional[int] = Query(None, alias='hotel'),
-                   LocationType: Optional[str] = Query(None, alias='LocationType'),
-                   Floor: Optional[int] = Query(None, alias='floor'),
-                   LocationId:Optional[int] = Query(None, alias='LocationId'),
-                   ):
-
-    # !Fazer o check se o usuario tem acesso ao hotel todo
-
-    return queryLocations(location_type=LocationType, floor=Floor, hotel_id=HotelId, location_id=LocationId)
+@app.post('/api/insert-new-order/')
+def insert_order(
+    Location: int = Query(None, alias="Location"),
+    Description: str = Query(None, alias="Description"),
+    OrderType: int = Query(None, alias="OrderType"),
+    CreatedBy: int = Query(None, alias="CreatedBy"),
+    Status: str = Query(None, alias="Status")
+    ):
+    
+    return insertNewOrder(
+                       location=Location,
+                       description=Description,
+                       order_type=OrderType,
+                       created_by=CreatedBy,
+                       status=Status)
+    
