@@ -8,11 +8,13 @@ from sqlalchemy.orm.state import InstanceState
 
 def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_type=None,created_by=None,status=None):
 
+    #Gera conexao banco
     engine = create_engine(DB)
     Session = sessionmaker()
     Session.configure(bind=engine)
     session = Session()
     
+    #Query inicial com os joins as outras tabelas
     query = (
         session.query(Orders, Locations.LocationName, User.Username, OrderStatus.StatusName, OrderTypes.OrderTypeName)
         .join(Locations, Orders.Location == Locations.IDLocation)
@@ -27,6 +29,7 @@ def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_typ
         )
     )
 
+    #Aplica os filtros que o usuario colocou, caso colocou.
     if id is not None:
         query = query.filter(Orders.IdOrder==id)
 
@@ -48,6 +51,7 @@ def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_typ
     if status is not None:
         query = query.filter(Orders.Status==status)
     
+    #Cria lista para serializar como JSON
     serialized_result = list()
 
     for order, local, nome, status, order_type in query:
@@ -64,47 +68,6 @@ def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_typ
         serialized_result.append(serialized_order)
 
     return serialized_result
-
-def queryOrders2(id=None,location=None,creation_date=None,end_date=None,order_type=None,created_by=None,status=None):
-
-    engine = create_engine(DB)
-    Session = sessionmaker()
-    Session.configure(bind=engine)
-    session = Session()
-
-    result = (
-        session.query(Orders, Locations.LocationName, User.Username, OrderStatus.StatusName)
-        .join(Locations, Orders.Location == Locations.IDLocation)
-        .join(OrderTypes)
-        .join(User)
-        .join(OrderStatus)
-        .options(
-            joinedload(Orders.location),
-            joinedload(Orders.order_type),
-            joinedload(Orders.created_by),
-            joinedload(Orders.status)
-        )
-        
-    )
-
-    result = result.filter(Orders.IdOrder>2).all()
-
-    serialized_result = list()
-
-    for order, local, nome, status in result:
-
-        serialized_order = {
-            'IdOrder': order.IdOrder,
-            'Description': order.Description,
-            'Status': status,
-            'CreatedBy': nome,
-            'Location': local
-        }
-
-        serialized_result.append(serialized_order)
-
-    return serialized_result
-
 
 
 

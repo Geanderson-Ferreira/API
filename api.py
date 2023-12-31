@@ -8,10 +8,6 @@ from DB_MANAGER.methods import queryOrders, queryLocations, queryOrders2
 
 app = FastAPI()
 
-@app.get('/api/test')
-def teste():
-    return queryOrders2()
-
 
 @app.get('/api/list-orders/')
 def list_orders(
