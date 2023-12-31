@@ -48,7 +48,21 @@ def populate():
         "ImageData": b"sample_image_data", "Description": "Order 6", "CreatedBy": 3, "Status": 2, "HotelId": 6},
         {"Location": 7, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 6,
         "ImageData": b"sample_image_data", "Description": "Order 7", "CreatedBy": 2, "Status": 2, "HotelId": 7},  
-    ]
+        {"Location": 1, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 1,
+        "ImageData": b"sample_image_data", "Description": "Order 1", "CreatedBy": 1, "Status": 1, "HotelId": 1},
+        {"Location": 2, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 2,
+        "ImageData": b"sample_image_data", "Description": "Order 2", "CreatedBy": 2, "Status": 2, "HotelId": 2},
+        {"Location": 3, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 3,
+        "ImageData": b"sample_image_data", "Description": "Order 3", "CreatedBy": 3, "Status": 2, "HotelId": 3},
+        {"Location": 4, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 4,
+        "ImageData": b"sample_image_data", "Description": "Order 4", "CreatedBy": 2, "Status": 2, "HotelId": 4},
+        {"Location": 5, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 5,
+        "ImageData": b"sample_image_data", "Description": "Order 5", "CreatedBy": 1, "Status": 2, "HotelId": 5},
+        {"Location": 6, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 6,
+        "ImageData": b"sample_image_data", "Description": "Order 6", "CreatedBy": 3, "Status": 2, "HotelId": 6},
+        {"Location": 7, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 6,
+        "ImageData": b"sample_image_data", "Description": "Order 7", "CreatedBy": 2, "Status": 2, "HotelId": 7},  
+]
 
     user_data = [
         {"Username": "user1", "Password": "password1", "FullName": "User One", "Email": "user1@example.com"},

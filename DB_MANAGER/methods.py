@@ -14,7 +14,7 @@ def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_typ
     session = Session()
     
     query = (
-        session.query(Orders, Locations.LocationName, User.Username, OrderStatus.StatusName)
+        session.query(Orders, Locations.LocationName, User.Username, OrderStatus.StatusName, OrderTypes.OrderTypeName)
         .join(Locations, Orders.Location == Locations.IDLocation)
         .join(OrderTypes)
         .join(User)
@@ -50,14 +50,15 @@ def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_typ
     
     serialized_result = list()
 
-    for order, local, nome, status in query:
+    for order, local, nome, status, order_type in query:
 
         serialized_order = {
             'IdOrder': order.IdOrder,
             'Description': order.Description,
             'Status': status,
             'CreatedBy': nome,
-            'Location': local
+            'Location': local,
+            'Type': order_type
         }
 
         serialized_result.append(serialized_order)
