@@ -3,9 +3,8 @@ from sqlalchemy import create_engine, func
 from DB_MANAGER.models import Orders, Locations, OrderStatus, OrderTypes, User
 from DB_MANAGER.config import DB
 from datetime import datetime
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
-
+from DB_MANAGER.base import Base
 
 def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_type=None,created_by=None,status=None):
 
@@ -90,7 +89,6 @@ def queryOrdersSummarized():
 
 def insertNewOrder(location=None, description=None, order_type=None,created_by=None,status=None, hotel_id=None):
 
-    Base = declarative_base()
     engine = create_engine(DB, echo=False)
     Base.metadata.create_all(engine)
     session = Session(engine)

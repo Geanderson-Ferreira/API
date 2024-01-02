@@ -4,10 +4,11 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 from DB_MANAGER.models import *
 from DB_MANAGER.config import DB
+from DB_MANAGER.base import Base
 
 #Funcao que popula o Banco
 def populate():
-    Base = declarative_base()
+
     engine = create_engine(DB, echo=False)
     Base.metadata.create_all(engine)
     session = Session(engine)

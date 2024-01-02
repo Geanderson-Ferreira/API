@@ -3,7 +3,7 @@ import pandas as pd
 from DB_MANAGER.config import MY_IP
 
 def test_list_orders(url=False):
-    
+
     url_complete = f'http://{MY_IP}:8000/api/list-orders/'
     print('>>', url_complete)
 

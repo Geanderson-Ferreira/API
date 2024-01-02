@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary, create_engine
-from sqlalchemy.orm import relationship, declarative_base
+from sqlalchemy.orm import relationship
 from DB_MANAGER.config import DB, DB_NAME
 from datetime import datetime
 import os
+from DB_MANAGER.base import Base
 
-Base = declarative_base()
 
 class Hotels(Base):
     __tablename__ = 'hotels'
