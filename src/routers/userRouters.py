@@ -4,7 +4,7 @@ from src.db_manager.config import API_PREFIX
 from sqlalchemy.orm import Session
 from src.db_manager.depends import get_db_session
 from src.db_manager.methods.user_methods import UserMethod
-from src.db_manager.schemas.user import UserSchema
+from src.schemas.user import UserSchema
 
 router  = APIRouter(prefix=API_PREFIX)
 

@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from src.db_manager.models import User
-from src.db_manager.schemas.user import UserSchema
+from src.schemas.user import UserSchema
 from passlib.context import CryptContext
 from fastapi.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
