@@ -1,7 +1,6 @@
-from sqlalchemy.orm import sessionmaker, joinedload, Session
-from sqlalchemy import create_engine, func
+from sqlalchemy.orm import joinedload, Session
+from sqlalchemy import func
 from src.db_manager.models import Orders, Locations, OrderStatus, OrderTypes, User
-from src.db_manager.config import DATABASE
 from src.schemas.oder import OrderSchema, FilterOrderSchema
 from fastapi.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
@@ -34,9 +33,6 @@ class OrderMethods:
     
     def queryOrdersSummarized(self):
 
-        #engine = create_engine(DATABASE)
-        #Session = sessionmaker(bind=engine)
-        #session = Session()
 
         order_counts = (
             self.db_session.query(OrderTypes.OrderTypeName, func.count(Orders.IdOrder))
@@ -51,13 +47,6 @@ class OrderMethods:
 
     def queryOrders(self, orderFilter: FilterOrderSchema):
 
-        #Gera conexao banco
-        #engine = create_engine(DATABASE)
-        #Session = sessionmaker()
-        #Session.configure(bind=engine)
-        #session = Session()
-        
-        #Query inicial com os joins as outras tabelas
         query = (
             self.db_session.query(Orders, Locations.LocationName, User.Username, OrderStatus.StatusName, OrderTypes.OrderTypeName)
             .join(Locations, Orders.Location == Locations.IDLocation)
