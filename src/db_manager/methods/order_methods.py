@@ -1,10 +1,12 @@
-from sqlalchemy.orm import sessionmaker, joinedload
+from sqlalchemy.orm import sessionmaker, joinedload, Session
 from sqlalchemy import create_engine, func
 from src.db_manager.models import Orders, Locations, OrderStatus, OrderTypes, User
 from src.db_manager.config import DATABASE
-from datetime import datetime
-from sqlalchemy.orm import Session
-from src.db_manager.base import Base
+from src.schemas.oder import OrderSchema
+from fastapi.exceptions import HTTPException
+from sqlalchemy.exc import IntegrityError
+from fastapi import status
+
 
 def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_type=None,created_by=None,status=None):
 
@@ -70,23 +72,48 @@ def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_typ
     return serialized_result
 
 
-def queryOrdersSummarized():
+class OrderMethods:
+    def __init__(self, db_session: Session):
+        self.db_session = db_session
+    
+    def insert_order(self, order: OrderSchema):
+        order_to_insert = Orders(
+            Location=order.location,
+            OrderType=order.order_type,
+            ImageData=bytes(order.image_data, 'utf-8'),
+            Description=order.description,
+            CreatedBy=order.created_by,
+            Status=order.status,
+            HotelId=order.hotel_id
+        )
 
-    engine = create_engine(DATABASE)
-    Session = sessionmaker(bind=engine)
-    session = Session()
+        try:
+            self.db_session.add(order_to_insert)
+            self.db_session.commit()
+        except IntegrityError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail='Order Data Already Exists'
+            )
+    def queryOrdersSummarized(self):
 
-    order_counts = (
-        session.query(OrderTypes.OrderTypeName, func.count(Orders.IdOrder))
-            .join(Orders, OrderTypes.IDTypeOrder == Orders.OrderType)
-            .filter(Orders.Status == 2)
-            .group_by(OrderTypes.OrderTypeName)
-                .all()
-    )
+        #engine = create_engine(DATABASE)
+        #Session = sessionmaker(bind=engine)
+        #session = Session()
 
-    # Criando um dicionário para armazenar os resultados
-    return {"order_counts": [{"OrderTypeName": order_type, "Count": count} for order_type, count in order_counts]}
+        order_counts = (
+            self.db_session.query(OrderTypes.OrderTypeName, func.count(Orders.IdOrder))
+                .join(Orders, OrderTypes.IDTypeOrder == Orders.OrderType)
+                .filter(Orders.Status == 2)
+                .group_by(OrderTypes.OrderTypeName)
+                    .all()
+        )
 
+        # Criando um dicionário para armazenar os resultados
+        return {"order_counts": [{"OrderTypeName": order_type, "Count": count} for order_type, count in order_counts]}
+
+
+"""
 def insertNewOrder(location=None, description=None, order_type=None,created_by=None,status=None, hotel_id=None):
 
     engine = create_engine(DATABASE, echo=False)
@@ -101,3 +128,4 @@ def insertNewOrder(location=None, description=None, order_type=None,created_by=N
     session.close()
 
     return data_to_insert
+"""

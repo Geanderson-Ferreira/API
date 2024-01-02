@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from src.db_manager.config import DATABASE, DB_NAME
 from datetime import datetime
 import os
-from src.db_manager.base import Base
+from src.db_manager.config import BASE as Base
 
 
 class Hotels(Base):
@@ -36,7 +36,7 @@ class Orders(Base):
     ImageData = Column(LargeBinary, nullable=True)
     Description = Column(String)
     CreatedBy = Column(Integer, ForeignKey('users.Id'))
-    Status = Column(Integer, ForeignKey('order_status.IdStatus'), default='Pendente')
+    Status = Column(Integer, ForeignKey('order_status.IdStatus'), default=1)
     HotelId = Column(Integer, ForeignKey('hotels.HotelId'))
     location = relationship('Locations', back_populates='orders')
     order_type = relationship('OrderTypes', back_populates='orders')

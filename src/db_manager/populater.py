@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 from src.db_manager.models import *
 from src.db_manager.config import DATABASE
-from src.db_manager.base import Base
+from src.db_manager.config import BASE as Base
 
 #Funcao que popula o Banco
 def populate():

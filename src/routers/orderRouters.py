@@ -1,8 +1,14 @@
-from fastapi import Query, APIRouter
+from fastapi import Query, APIRouter, Depends, status
 from typing import Optional
-from src.db_manager.methods.order_methods import queryOrders, queryOrdersSummarized, insertNewOrder
+from src.db_manager.methods.order_methods import queryOrders
+from src.schemas.oder import OrderSchema
+from sqlalchemy.orm import Session
+from src.db_manager.depends import get_db_session
+from src.db_manager.methods.order_methods import OrderMethods
+from fastapi.responses import JSONResponse
+from src.db_manager.config import API_PREFIX
 
-router = APIRouter(prefix='/api')
+router = APIRouter(prefix=API_PREFIX)
 
 @router.get('/list-orders/')
 def list_orders(
@@ -24,21 +30,20 @@ def list_orders(
                        status=Status)
 
 @router.post('/insert-new-order/')
-def insert_order(
-    Location: int = Query(None, alias="Location"),
-    Description: str = Query(None, alias="Description"),
-    OrderType: int = Query(None, alias="OrderType"),
-    CreatedBy: int = Query(None, alias="CreatedBy"),
-    Status: str = Query(None, alias="Status")
-    ):
+def insert_order(order: OrderSchema, db_session: Session = Depends(get_db_session)):
+
+    orderCase = OrderMethods(db_session)
+    orderCase.insert_order(order)
     
-    return insertNewOrder(
-                       location=Location,
-                       description=Description,
-                       order_type=OrderType,
-                       created_by=CreatedBy,
-                       status=Status)
+    return JSONResponse(
+        content={'msg':'success'},
+        status_code=status.HTTP_201_CREATED
+    )
+
 
 @router.get('/orders_types_summarizeds/')
-def orders_types_summarizeds():
-    return queryOrdersSummarized()
+def orders_types_summarizeds(db_session: Session = Depends(get_db_session)):
+
+    orderCase = OrderMethods(db_session)
+    return orderCase.queryOrdersSummarized()
+
