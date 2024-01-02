@@ -1,7 +1,7 @@
-from db_manager.models import recreate_db
-from db_manager.populater import populate
+from src.db_manager.models import recreate_db
+from src.db_manager.populater import populate
 from sys import argv
-from tests.tester import test_list_orders
+from src.tests.tester import test_list_orders
 
 # Key é o parametro, o Value é a funcao.
 ARGV_FUNCTIONS = {
