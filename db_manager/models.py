@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary, create_engine
 from sqlalchemy.orm import relationship
-from DB_MANAGER.config import DB, DB_NAME
+from db_manager.config import DB, DB_NAME
 from datetime import datetime
 import os
-from DB_MANAGER.base import Base
+from db_manager.base import Base
 
 
 class Hotels(Base):

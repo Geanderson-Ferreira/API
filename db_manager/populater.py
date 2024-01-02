@@ -2,9 +2,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 from datetime import datetime
-from DB_MANAGER.models import *
-from DB_MANAGER.config import DB
-from DB_MANAGER.base import Base
+from db_manager.models import *
+from db_manager.config import DB
+from db_manager.base import Base
 
 #Funcao que popula o Banco
 def populate():

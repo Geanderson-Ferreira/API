@@ -1,5 +1,5 @@
-from DB_MANAGER.models import recreate_db
-from DB_MANAGER.populater import populate
+from db_manager.models import recreate_db
+from db_manager.populater import populate
 from sys import argv
 from tests.tester import test_list_orders
 

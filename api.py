@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Query
 from typing import Optional
-from DB_MANAGER.methods import queryOrders, queryOrdersSummarized, insertNewOrder
+from db_manager.methods import queryOrders, queryOrdersSummarized, insertNewOrder
 
 #Para rodar a API, esteja no mesmo diretorio desde arquivo e rodar:
 #>> uvicorn api:app

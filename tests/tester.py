@@ -1,8 +1,8 @@
 import requests
 import pandas as pd
-from DB_MANAGER.config import MY_IP
+from db_manager.config import MY_IP
 
-def test_list_orders(url=False):
+def test_list_orders():
 
     url_complete = f'http://{MY_IP}:8000/api/list-orders/'
     print('>>', url_complete)

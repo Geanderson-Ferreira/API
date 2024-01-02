@@ -1,10 +1,10 @@
 from sqlalchemy.orm import sessionmaker, joinedload
 from sqlalchemy import create_engine, func
-from DB_MANAGER.models import Orders, Locations, OrderStatus, OrderTypes, User
-from DB_MANAGER.config import DB
+from db_manager.models import Orders, Locations, OrderStatus, OrderTypes, User
+from db_manager.config import DB
 from datetime import datetime
 from sqlalchemy.orm import Session
-from DB_MANAGER.base import Base
+from db_manager.base import Base
 
 def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_type=None,created_by=None,status=None):
 
