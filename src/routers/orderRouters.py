@@ -2,9 +2,9 @@ from fastapi import Query, APIRouter
 from typing import Optional
 from src.db_manager.methods.order_methods import queryOrders, queryOrdersSummarized, insertNewOrder
 
-orders_router = APIRouter(prefix='/api')
+router = APIRouter(prefix='/api')
 
-@orders_router.get('/list-orders/')
+@router.get('/list-orders/')
 def list_orders(
     IdOrder: Optional[int] = Query(None, alias="IdOrder"),
     Location: Optional[int] = Query(None, alias="Location"),
@@ -23,7 +23,7 @@ def list_orders(
                        created_by=CreatedBy,
                        status=Status)
 
-@orders_router.post('/insert-new-order/')
+@router.post('/insert-new-order/')
 def insert_order(
     Location: int = Query(None, alias="Location"),
     Description: str = Query(None, alias="Description"),
@@ -39,6 +39,6 @@ def insert_order(
                        created_by=CreatedBy,
                        status=Status)
 
-@orders_router.get('/orders_types_summarizeds/')
+@router.get('/orders_types_summarizeds/')
 def orders_types_summarizeds():
     return queryOrdersSummarized()

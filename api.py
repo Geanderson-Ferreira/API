@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from src.routers.orderRouters import orders_router
+from src.routers.orderRouters import router as order_router
+from src.routers.userRouters import router as user_router
 
 #Para rodar a API, esteja no mesmo diretorio desde arquivo e rodar:
 #>> uvicorn api:app
@@ -11,4 +12,5 @@ app = FastAPI()
 def check_health():
     return 'API rodando...'
 
-app.include_router(orders_router)
+app.include_router(order_router)
+app.include_router(user_router)
