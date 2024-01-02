@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary, create_engine
 from sqlalchemy.orm import relationship
-from src.db_manager.config import DB, DB_NAME
+from src.db_manager.config import DATABASE, DB_NAME
 from datetime import datetime
 import os
 from src.db_manager.base import Base
@@ -71,7 +71,7 @@ class OrderStatus(Base):
 
 def create_all():
     try:
-        engine = create_engine(DB)
+        engine = create_engine(DATABASE)
         Base.metadata.create_all(engine)
     except:
         pass

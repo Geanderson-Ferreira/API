@@ -1,7 +1,7 @@
 from sqlalchemy.orm import sessionmaker, joinedload
 from sqlalchemy import create_engine, func
 from src.db_manager.models import Orders, Locations, OrderStatus, OrderTypes, User
-from src.db_manager.config import DB
+from src.db_manager.config import DATABASE
 from datetime import datetime
 from sqlalchemy.orm import Session
 from src.db_manager.base import Base
@@ -9,7 +9,7 @@ from src.db_manager.base import Base
 def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_type=None,created_by=None,status=None):
 
     #Gera conexao banco
-    engine = create_engine(DB)
+    engine = create_engine(DATABASE)
     Session = sessionmaker()
     Session.configure(bind=engine)
     session = Session()
@@ -72,7 +72,7 @@ def queryOrders(id=None,location=None,creation_date=None,end_date=None,order_typ
 
 def queryOrdersSummarized():
 
-    engine = create_engine(DB)
+    engine = create_engine(DATABASE)
     Session = sessionmaker(bind=engine)
     session = Session()
 
@@ -89,7 +89,7 @@ def queryOrdersSummarized():
 
 def insertNewOrder(location=None, description=None, order_type=None,created_by=None,status=None, hotel_id=None):
 
-    engine = create_engine(DB, echo=False)
+    engine = create_engine(DATABASE, echo=False)
     Base.metadata.create_all(engine)
     session = Session(engine)
 

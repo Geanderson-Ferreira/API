@@ -3,13 +3,13 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 from datetime import datetime
 from src.db_manager.models import *
-from src.db_manager.config import DB
+from src.db_manager.config import DATABASE
 from src.db_manager.base import Base
 
 #Funcao que popula o Banco
 def populate():
 
-    engine = create_engine(DB, echo=False)
+    engine = create_engine(DATABASE, echo=False)
     Base.metadata.create_all(engine)
     session = Session(engine)
 
