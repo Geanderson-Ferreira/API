@@ -11,6 +11,6 @@ class UserSchema(BaseModel):
 
     @validator('username')
     def validate_username(cls, value):
-        if not re.match('^([a-z]|[0-9])+$', value):
+        if not re.match('^([a-z]|[0-9]|@)+$', value):
             raise ValueError('Username Format Invalid.')
         return value

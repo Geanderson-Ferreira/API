@@ -1,8 +1,8 @@
-"""primeira migration
+"""criando as tabelas
 
-Revision ID: c2b1a15b8410
+Revision ID: 2b523cb08a2c
 Revises: 
-Create Date: 2024-01-02 00:06:30.343967
+Create Date: 2024-01-02 21:07:34.717364
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'c2b1a15b8410'
+revision: str = '2b523cb08a2c'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -50,13 +50,13 @@ def upgrade() -> None:
     sa.UniqueConstraint('Username')
     )
     op.create_table('locations',
-    sa.Column('IDLocation', sa.Integer(), nullable=False),
+    sa.Column('LocationId', sa.Integer(), nullable=False),
     sa.Column('LocationType', sa.String(), nullable=False),
     sa.Column('LocationName', sa.String(), nullable=False),
     sa.Column('Floor', sa.Integer(), nullable=False),
     sa.Column('HotelId', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['HotelId'], ['hotels.HotelId'], ),
-    sa.PrimaryKeyConstraint('IDLocation')
+    sa.PrimaryKeyConstraint('LocationId')
     )
     op.create_table('orders',
     sa.Column('IdOrder', sa.Integer(), nullable=False),
@@ -71,7 +71,7 @@ def upgrade() -> None:
     sa.Column('HotelId', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['CreatedBy'], ['users.Id'], ),
     sa.ForeignKeyConstraint(['HotelId'], ['hotels.HotelId'], ),
-    sa.ForeignKeyConstraint(['Location'], ['locations.IDLocation'], ),
+    sa.ForeignKeyConstraint(['Location'], ['locations.LocationId'], ),
     sa.ForeignKeyConstraint(['OrderType'], ['order_types.IDTypeOrder'], ),
     sa.ForeignKeyConstraint(['Status'], ['order_status.IdStatus'], ),
     sa.PrimaryKeyConstraint('IdOrder')

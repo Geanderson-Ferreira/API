@@ -17,7 +17,7 @@ class Hotels(Base):
 class Locations(Base):
     __tablename__ = 'locations'
 
-    IDLocation = Column(Integer, primary_key=True)
+    LocationId = Column(Integer, primary_key=True)
     LocationType = Column(String, nullable=False)
     LocationName = Column(String, nullable=False)
     Floor = Column(Integer, nullable=False)
@@ -29,7 +29,7 @@ class Orders(Base):
     __tablename__ = 'orders'
 
     IdOrder = Column(Integer, primary_key=True)
-    Location = Column(Integer, ForeignKey('locations.IDLocation'))
+    Location = Column(Integer, ForeignKey('locations.LocationId'))
     CreationDate = Column(DateTime)
     EndDate = Column(DateTime)
     OrderType = Column(Integer, ForeignKey('order_types.IDTypeOrder'))
