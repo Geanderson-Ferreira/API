@@ -19,6 +19,7 @@ class UserMethod:
             FullName=user.fullname,
             Email=user.email
         )
+        
         try:
             self.db_session.add(user_to_insert)
             self.db_session.commit()
@@ -27,4 +28,3 @@ class UserMethod:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail='User Data Already Exists'
             )
-

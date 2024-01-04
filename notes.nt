@@ -8,3 +8,24 @@
 #    >> alembic downgrade -1
 
 ######  END ANOTACOES DO DEV
+
+
+JWT
+
+
+user:   user + pass -> server
+
+server: match(user, pass)
+
+if true:
+    server -> token
+
+Server envia Token para o Front,
+    tempodevida
+    
+front armazena esse token
+enquanto front armazena o token, mantem a session
+
+
+
+

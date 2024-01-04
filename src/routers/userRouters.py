@@ -16,6 +16,7 @@ def user_register(
 
     u = UserMethod(db_session)
     u.register_user(user=user)
+    
     return JSONResponse(
         content={'msg':'success'},
         status_code=status.HTTP_201_CREATED

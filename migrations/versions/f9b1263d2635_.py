@@ -1,8 +1,8 @@
-"""criando as tabelas
+"""empty message
 
-Revision ID: 2b523cb08a2c
+Revision ID: f9b1263d2635
 Revises: 
-Create Date: 2024-01-02 21:07:34.717364
+Create Date: 2024-01-04 11:19:35.827406
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '2b523cb08a2c'
+revision: str = 'f9b1263d2635'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -39,7 +39,7 @@ def upgrade() -> None:
     sa.UniqueConstraint('OrderTypeName')
     )
     op.create_table('users',
-    sa.Column('Id', sa.Integer(), nullable=False),
+    sa.Column('Id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('Username', sa.String(), nullable=False),
     sa.Column('Password', sa.String(), nullable=False),
     sa.Column('FullName', sa.String(), nullable=True),
@@ -47,19 +47,20 @@ def upgrade() -> None:
     sa.Column('CreatedAt', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('Id'),
     sa.UniqueConstraint('Email'),
+    sa.UniqueConstraint('Password'),
     sa.UniqueConstraint('Username')
     )
     op.create_table('locations',
-    sa.Column('LocationId', sa.Integer(), nullable=False),
+    sa.Column('LocationId', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('LocationType', sa.String(), nullable=False),
     sa.Column('LocationName', sa.String(), nullable=False),
     sa.Column('Floor', sa.Integer(), nullable=False),
     sa.Column('HotelId', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['HotelId'], ['hotels.HotelId'], ),
+    sa.ForeignKeyConstraint(['HotelId'], ['hotels.HotelId'], name='fk_location_hotel', ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('LocationId')
     )
     op.create_table('orders',
-    sa.Column('IdOrder', sa.Integer(), nullable=False),
+    sa.Column('IdOrder', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('Location', sa.Integer(), nullable=True),
     sa.Column('CreationDate', sa.DateTime(), nullable=True),
     sa.Column('EndDate', sa.DateTime(), nullable=True),
@@ -69,11 +70,11 @@ def upgrade() -> None:
     sa.Column('CreatedBy', sa.Integer(), nullable=True),
     sa.Column('Status', sa.Integer(), nullable=True),
     sa.Column('HotelId', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['CreatedBy'], ['users.Id'], ),
-    sa.ForeignKeyConstraint(['HotelId'], ['hotels.HotelId'], ),
-    sa.ForeignKeyConstraint(['Location'], ['locations.LocationId'], ),
-    sa.ForeignKeyConstraint(['OrderType'], ['order_types.IDTypeOrder'], ),
-    sa.ForeignKeyConstraint(['Status'], ['order_status.IdStatus'], ),
+    sa.ForeignKeyConstraint(['CreatedBy'], ['users.Id'], name='fk_orderType', ondelete='SET NULL'),
+    sa.ForeignKeyConstraint(['HotelId'], ['hotels.HotelId'], name='fk_location_hotel', ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['Location'], ['locations.LocationId'], name='fk_location', ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['OrderType'], ['order_types.IDTypeOrder'], name='fk_ordertype', ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['Status'], ['order_status.IdStatus'], name='fk_orderstatus', ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('IdOrder')
     )
     # ### end Alembic commands ###

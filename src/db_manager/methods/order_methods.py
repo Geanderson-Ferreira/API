@@ -5,7 +5,7 @@ from src.schemas.oder import OrderSchema, FilterOrderSchema
 from fastapi.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
 from fastapi import status
-
+from datetime import datetime
 
 class OrderMethods:
     def __init__(self, db_session: Session):
@@ -14,6 +14,7 @@ class OrderMethods:
     def insert_order(self, order: OrderSchema):
         order_to_insert = Orders(
             Location=order.location,
+            CreationDate=datetime.utcnow(),
             OrderType=order.order_type,
             ImageData=bytes(order.image_data, 'utf-8'),
             Description=order.description,
@@ -28,7 +29,7 @@ class OrderMethods:
         except IntegrityError:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail='Order Data Already Exists'
+                detail='Erro de Integridade do Banco. Verifique os dados que esta tentando inserir.',
             )
     
     def queryOrdersSummarized(self):
@@ -49,7 +50,7 @@ class OrderMethods:
 
         query = (
             self.db_session.query(Orders, Locations.LocationName, User.Username, OrderStatus.StatusName, OrderTypes.OrderTypeName)
-            .join(Locations, Orders.Location == Locations.IDLocation)
+            .join(Locations, Orders.Location == Locations.LocationId)
             .join(OrderTypes)
             .join(User)
             .join(OrderStatus)
