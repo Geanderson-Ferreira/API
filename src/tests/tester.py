@@ -1,3 +1,7 @@
+"""
+
+MY_IP = os.getenv('MY_IP')
+
 import requests
 import pandas as pd
 from src.db_manager.config import MY_IP
@@ -16,4 +20,4 @@ def test_list_orders():
     else:
         print('>> Result:', r.content)
 
-
+"""

@@ -1,6 +1,6 @@
 from src.db_manager.populater import populate
 from sys import argv
-from src.tests.tester import test_list_orders
+#from src.tests.tester import test_list_orders
 import os
 from src.db_manager.config import DEV_ENV_RUNNER_CONFIG
 import socket
@@ -10,7 +10,6 @@ ARGV_FUNCTIONS = {
     'Parametros aceitos no modulo manage.py \n': '',
     'help': lambda: [print('> ', key) for key in ARGV_FUNCTIONS.keys()],
     'populateDB': populate,
-    'list-orders': test_list_orders,
     'run': lambda: os.system(DEV_ENV_RUNNER_CONFIG[socket.gethostname()])
 }
 

@@ -12,7 +12,6 @@ load_dotenv()
 
 DATABASE = os.getenv('DATABASE')
 DB_NAME = os.getenv('DB_NAME')
-MY_IP = os.getenv('MY_IP')
 API_PREFIX = '/api'
 ENGINE = create_engine(DATABASE, connect_args={'check_same_thread': False}, echo=False)
 
