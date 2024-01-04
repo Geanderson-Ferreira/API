@@ -1,5 +1,2 @@
 *.gitignore
 *__pycache__
-*.db
-.env
-notes.nt

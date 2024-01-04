@@ -12,17 +12,25 @@ class Hotels(Base):
     locations = relationship('Locations', back_populates='Hotel')
     orders = relationship('Orders', back_populates='Hotel')
 
+class LocationTypes(Base):
+    __tablename__ = 'location_types'
+
+    LocationTypeId = Column(Integer, primary_key=True, unique=True, autoincrement=True)
+    LocationTypeName = Column(String, nullable=False, unique=True)
+
+    location = relationship('Locations', back_populates='LocationTypeName')
 
 class Locations(Base):
     __tablename__ = 'locations'
 
-    LocationId = Column(Integer, primary_key=True, autoincrement=True)
-    LocationType = Column(String, nullable=False)
+    LocationId = Column(Integer, primary_key=True, unique=True, autoincrement=True)
+    LocationType = Column(Integer, ForeignKey('location_types.LocationTypeId', name='fk_location_type', ondelete='CASCADE', deferrable=False),nullable=False)
     LocationName = Column(String, nullable=False)
     Floor = Column(Integer, nullable=False)
     HotelId = Column(Integer, ForeignKey('hotels.HotelId', name='fk_location_hotel', ondelete='CASCADE', deferrable=False))
     orders = relationship('Orders', back_populates='location')
     Hotel = relationship('Hotels')
+    LocationTypeName = relationship('LocationTypes')
 
 class Orders(Base):
     __tablename__ = 'orders'
@@ -52,6 +60,7 @@ class User(Base):
     Password = Column(String, nullable=False, unique=True)
     FullName = Column(String)
     Email = Column(String, unique=True, nullable=False)
+
     CreatedAt = Column(DateTime, default=datetime.utcnow)
     orders = relationship('Orders', back_populates='created_by')
 

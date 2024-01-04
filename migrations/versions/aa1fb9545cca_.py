@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: f9b1263d2635
+Revision ID: aa1fb9545cca
 Revises: 
-Create Date: 2024-01-04 11:19:35.827406
+Create Date: 2024-01-04 12:41:59.695353
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'f9b1263d2635'
+revision: str = 'aa1fb9545cca'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,6 +25,13 @@ def upgrade() -> None:
     sa.Column('HotelName', sa.String(), nullable=False),
     sa.PrimaryKeyConstraint('HotelId'),
     sa.UniqueConstraint('HotelName')
+    )
+    op.create_table('location_types',
+    sa.Column('LocationTypeId', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('LocationTypeName', sa.String(), nullable=False),
+    sa.PrimaryKeyConstraint('LocationTypeId'),
+    sa.UniqueConstraint('LocationTypeId'),
+    sa.UniqueConstraint('LocationTypeName')
     )
     op.create_table('order_status',
     sa.Column('IdStatus', sa.Integer(), nullable=False),
@@ -52,12 +59,14 @@ def upgrade() -> None:
     )
     op.create_table('locations',
     sa.Column('LocationId', sa.Integer(), autoincrement=True, nullable=False),
-    sa.Column('LocationType', sa.String(), nullable=False),
+    sa.Column('LocationType', sa.Integer(), nullable=False),
     sa.Column('LocationName', sa.String(), nullable=False),
     sa.Column('Floor', sa.Integer(), nullable=False),
     sa.Column('HotelId', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['HotelId'], ['hotels.HotelId'], name='fk_location_hotel', ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('LocationId')
+    sa.ForeignKeyConstraint(['LocationType'], ['location_types.LocationTypeId'], name='fk_location_type', ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('LocationId'),
+    sa.UniqueConstraint('LocationId')
     )
     op.create_table('orders',
     sa.Column('IdOrder', sa.Integer(), autoincrement=True, nullable=False),
@@ -87,5 +96,6 @@ def downgrade() -> None:
     op.drop_table('users')
     op.drop_table('order_types')
     op.drop_table('order_status')
+    op.drop_table('location_types')
     op.drop_table('hotels')
     # ### end Alembic commands ###
