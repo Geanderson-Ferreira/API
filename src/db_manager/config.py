@@ -23,10 +23,12 @@ def enable_foreign_keys(dbapi_connection, connection_record):
     cursor.execute("PRAGMA foreign_keys=ON")
     cursor.close()
 
+
 SESSION = sessionmaker(bind=ENGINE)
 BASE = declarative_base()
 
 #variavel para uso apenas em desenvolvimento
 DEV_ENV_RUNNER_CONFIG = {
-    'gean-macbookpro': 'uvicorn api:app --host 10.0.0.102 --port 8000 --reload'
+    'gean-macbookpro': 'uvicorn api:app --host 10.0.0.102 --port 8000 --reload',
+    'DESKTOP-Q6PV6P4': 'uvicorn api:app --host 192.168.100.105 --port 8000 --reload'
 }
