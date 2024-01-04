@@ -10,7 +10,7 @@ class Hotels(Base):
     HotelId = Column(Integer, primary_key=True, autoincrement=True)
     HotelName = Column(String, unique=True, nullable=False)
     locations = relationship('Locations', back_populates='Hotel')
-    orders = relationship('Orders', back_populates='Hotel')
+    orders = relationship('Orders', back_populates='Hotel') 
 
 class LocationTypes(Base):
     __tablename__ = 'location_types'
