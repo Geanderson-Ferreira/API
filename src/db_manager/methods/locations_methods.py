@@ -1,7 +1,6 @@
-from sqlalchemy.orm import joinedload, Session
-from sqlalchemy import func
-from src.db_manager.models import Orders, Locations, OrderStatus, OrderTypes, User
-from src.schemas.oder import OrderSchema, FilterOrderSchema
+from sqlalchemy.orm import Session
+from src.db_manager.models import Order
+from src.schemas.order import OrderSchema
 from fastapi.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
 from fastapi import status
@@ -12,14 +11,14 @@ class OrderMethods:
         self.db_session = db_session
     
     def insert_order(self, order: OrderSchema):
-        order_to_insert = Orders(
-            Location=order.location,
+        order_to_insert = Order(
+            Location=order.location_id,
             CreationDate=datetime.utcnow(),
-            OrderType=order.order_type,
+            OrderType=order.order_type_id,
             ImageData=bytes(order.image_data, 'utf-8'),
             Description=order.description,
-            CreatedBy=order.created_by,
-            Status=order.status,
+            UserId=order.created_by_id,
+            Status=order.status_id,
             HotelId=order.hotel_id
         )
 

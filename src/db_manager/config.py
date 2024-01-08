@@ -12,6 +12,9 @@ load_dotenv()
 
 DATABASE = os.getenv('DATABASE')
 DB_NAME = os.getenv('DB_NAME')
+SECRET_KEY = os.getenv('SECRET_KEY')
+ALGORITHM = os.getenv('ALGORITHM')
+
 API_PREFIX = '/api'
 ENGINE = create_engine(DATABASE, connect_args={'check_same_thread': False}, echo=False)
 

@@ -1,5 +1,4 @@
 from pydantic import BaseModel, validator
-from typing import Optional
 
 class Location(BaseModel):
     location_type: str

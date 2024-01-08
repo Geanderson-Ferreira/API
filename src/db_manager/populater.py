@@ -1,5 +1,4 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import Session
 from datetime import datetime
 from src.db_manager.models import *
@@ -24,45 +23,53 @@ def populate():
         {"HotelName": "Hotel G"},
     ]
 
+    location_types_data = [
+        {"LocationTypeName": "Quarto"},
+        {"LocationTypeName": "Eventos"},
+        {"LocationTypeName": "BackOffice"},
+        {"LocationTypeName": "Areas Sociais"},
+        {"LocationTypeName": "Fitnes"},
+    ]
+
     location_data = [
-        {"LocationType": "Quarto", "LocationName": "752", "Floor": 7, "HotelId": 1},
-        {"LocationType": "Quarto", "LocationName": "369", "Floor": 3, "HotelId": 1},
-        {"LocationType": "Quarto", "LocationName": "254", "Floor": 2, "HotelId": 1},
-        {"LocationType": "Eventos", "LocationName": "Sala de Eventos A", "Floor": 2, "HotelId": 2},
-        {"LocationType": "BackOffice", "LocationName": "Escritorio", "Floor": 0, "HotelId": 2},
-        {"LocationType": "FrontOffice", "LocationName": "Recepcao", "Floor": 0, "HotelId": 3},
-        {"LocationType": "FrontOffice", "LocationName": "Lobby", "Floor": 0, "HotelId": 1},
+        {"LocationTypeId": 1, "LocationName": "752", "Floor": 7, "HotelId": 1},
+        {"LocationTypeId": 1, "LocationName": "369", "Floor": 3, "HotelId": 1},
+        {"LocationTypeId": 1, "LocationName": "254", "Floor": 2, "HotelId": 1},
+        {"LocationTypeId": 2, "LocationName": "Sala de Eventos A", "Floor": 2, "HotelId": 2},
+        {"LocationTypeId": 3, "LocationName": "Escritorio", "Floor": 0, "HotelId": 2},
+        {"LocationTypeId": 3, "LocationName": "Recepcao", "Floor": 0, "HotelId": 3},
+        {"LocationTypeId": 4, "LocationName": "Lobby", "Floor": 0, "HotelId": 1},
     ]
 
     order_data = [
-        {"Location": 1, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 1,
-        "ImageData": b"sample_image_data", "Description": "Order 1", "CreatedBy": 1, "Status": 1, "HotelId": 1},
-        {"Location": 2, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 2,
-        "ImageData": b"sample_image_data", "Description": "Order 2", "CreatedBy": 2, "Status": 2, "HotelId": 2},
-        {"Location": 3, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 3,
-        "ImageData": b"sample_image_data", "Description": "Order 3", "CreatedBy": 3, "Status": 2, "HotelId": 3},
-        {"Location": 4, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 4,
-        "ImageData": b"sample_image_data", "Description": "Order 4", "CreatedBy": 2, "Status": 2, "HotelId": 4},
-        {"Location": 5, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 5,
-        "ImageData": b"sample_image_data", "Description": "Order 5", "CreatedBy": 1, "Status": 2, "HotelId": 5},
-        {"Location": 6, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 6,
-        "ImageData": b"sample_image_data", "Description": "Order 6", "CreatedBy": 3, "Status": 2, "HotelId": 6},
-        {"Location": 7, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 6,
-        "ImageData": b"sample_image_data", "Description": "Order 7", "CreatedBy": 2, "Status": 2, "HotelId": 7},  
-        {"Location": 1, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 1,
-        "ImageData": b"sample_image_data", "Description": "Order 1", "CreatedBy": 1, "Status": 1, "HotelId": 1},
-        {"Location": 2, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 2,
-        "ImageData": b"sample_image_data", "Description": "Order 2", "CreatedBy": 2, "Status": 2, "HotelId": 2},
-        {"Location": 3, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 3,
-        "ImageData": b"sample_image_data", "Description": "Order 3", "CreatedBy": 3, "Status": 2, "HotelId": 3},
-        {"Location": 4, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 4,
-        "ImageData": b"sample_image_data", "Description": "Order 4", "CreatedBy": 2, "Status": 2, "HotelId": 4},
-        {"Location": 5, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 5,
-        "ImageData": b"sample_image_data", "Description": "Order 5", "CreatedBy": 1, "Status": 2, "HotelId": 5},
-        {"Location": 6, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 6,
-        "ImageData": b"sample_image_data", "Description": "Order 6", "CreatedBy": 3, "Status": 2, "HotelId": 6},
-        {"Location": 7, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderType": 6,
-        "ImageData": b"sample_image_data", "Description": "Order 7", "CreatedBy": 2, "Status": 2, "HotelId": 7},  
+        {"LocationId": 1, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 1,
+        "ImageData": b"sample_image_data", "Description": "Order 1", "UserId": 1, "OrderStatusId": 1, "HotelId": 1},
+        {"LocationId": 2, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 2,
+        "ImageData": b"sample_image_data", "Description": "Order 2", "UserId": 2, "OrderStatusId": 2, "HotelId": 2},
+        {"LocationId": 3, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 3,
+        "ImageData": b"sample_image_data", "Description": "Order 3", "UserId": 3, "OrderStatusId": 2, "HotelId": 3},
+        {"LocationId": 4, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 4,
+        "ImageData": b"sample_image_data", "Description": "Order 4", "UserId": 2, "OrderStatusId": 2, "HotelId": 4},
+        {"LocationId": 5, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 5,
+        "ImageData": b"sample_image_data", "Description": "Order 5", "UserId": 1, "OrderStatusId": 2, "HotelId": 5},
+        {"LocationId": 6, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 6,
+        "ImageData": b"sample_image_data", "Description": "Order 6", "UserId": 3, "OrderStatusId": 2, "HotelId": 6},
+        {"LocationId": 7, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 6,
+        "ImageData": b"sample_image_data", "Description": "Order 7", "UserId": 2, "OrderStatusId": 2, "HotelId": 7},  
+        {"LocationId": 1, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 1,
+        "ImageData": b"sample_image_data", "Description": "Order 1", "UserId": 1, "OrderStatusId": 1, "HotelId": 1},
+        {"LocationId": 2, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 2,
+        "ImageData": b"sample_image_data", "Description": "Order 2", "UserId": 2, "OrderStatusId": 2, "HotelId": 2},
+        {"LocationId": 3, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 3,
+        "ImageData": b"sample_image_data", "Description": "Order 3", "UserId": 3, "OrderStatusId": 2, "HotelId": 3},
+        {"LocationId": 4, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 4,
+        "ImageData": b"sample_image_data", "Description": "Order 4", "UserId": 2, "OrderStatusId": 2, "HotelId": 4},
+        {"LocationId": 5, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 5,
+        "ImageData": b"sample_image_data", "Description": "Order 5", "UserId": 1, "OrderStatusId": 2, "HotelId": 5},
+        {"LocationId": 6, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 6,
+        "ImageData": b"sample_image_data", "Description": "Order 6", "UserId": 3, "OrderStatusId": 2, "HotelId": 6},
+        {"LocationId": 7, "CreationDate": datetime.utcnow(), "EndDate": datetime.utcnow(), "OrderTypeId": 6,
+        "ImageData": b"sample_image_data", "Description": "Order 7", "UserId": 2, "OrderStatusId": 2, "HotelId": 7},  
 ]
 
     user_data = [
@@ -96,22 +103,25 @@ def populate():
     try:
 
         for hotel in hotel_data:
-            session.add(Hotels(**hotel))
+            session.add(Hotel(**hotel))
 
         for location in location_data:
-            session.add(Locations(**location))
+            session.add(Location(**location))
 
         for order in order_data:
-            session.add(Orders(**order))
+            session.add(Order(**order))
 
         for user in user_data:
             session.add(User(**user))
 
         for order_type in order_type_data:
-            session.add(OrderTypes(**order_type))
+            session.add(OrderType(**order_type))
 
         for order_status in order_status_data:
             session.add(OrderStatus(**order_status))
+
+        for location_type in location_types_data:
+            session.add(LocationType(**location_type))
 
         session.commit()
         session.close()

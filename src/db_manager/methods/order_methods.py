@@ -1,7 +1,7 @@
 from sqlalchemy.orm import joinedload, Session
 from sqlalchemy import func
-from src.db_manager.models import Orders, Locations, OrderStatus, OrderTypes, User
-from src.schemas.oder import OrderSchema, FilterOrderSchema
+from src.db_manager.models import Order, Location, OrderStatus, OrderType, User
+from src.schemas.order import OrderSchema, FilterOrderSchema
 from fastapi.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
 from fastapi import status
@@ -11,17 +11,24 @@ class OrderMethods:
     def __init__(self, db_session: Session):
         self.db_session = db_session
     
-    def insert_order(self, order: OrderSchema):
-        order_to_insert = Orders(
-            Location=order.location,
-            CreationDate=datetime.utcnow(),
-            OrderType=order.order_type,
-            ImageData=bytes(order.image_data, 'utf-8'),
-            Description=order.description,
-            CreatedBy=order.created_by,
-            Status=order.status,
-            HotelId=order.hotel_id
-        )
+    def insertOrder(self, order: OrderSchema):
+
+        try:
+            order_to_insert = Order(
+                LocationId=order.location_id,
+                CreationDate=datetime.utcnow(),
+                OrderTypeId=order.order_type_id,
+                ImageData=bytes(order.image_data, 'utf-8'),
+                Description=order.description,
+                UserId=order.created_by_id,
+                OrderStatusId=order.status_id,
+                HotelId=order.hotel_ids
+            )
+        except Exception as erro:
+            raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f'Erro ao processar insertOrder.: {erro}',
+                )
 
         try:
             self.db_session.add(order_to_insert)
@@ -31,55 +38,61 @@ class OrderMethods:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail='Erro de Integridade do Banco. Verifique os dados que esta tentando inserir.',
             )
-    
+
     def queryOrdersSummarized(self):
 
+        try:
+            order_counts = (
+                self.db_session.query(OrderType.OrderTypeName, func.count(Order.OrderId))
+                    .join(Order, OrderType.OrderTypeId == Order.OrderTypeId)
+                    .filter(Order.OrderStatusId == 2)
+                    .group_by(OrderType.OrderTypeName)
+                        .all()
+            )
 
-        order_counts = (
-            self.db_session.query(OrderTypes.OrderTypeName, func.count(Orders.IdOrder))
-                .join(Orders, OrderTypes.IDTypeOrder == Orders.OrderType)
-                .filter(Orders.Status == 2)
-                .group_by(OrderTypes.OrderTypeName)
-                    .all()
-        )
+            # Criando um dicionário para armazenar os resultados
+            return {"order_counts": [{"OrderTypeName": order_type, "Count": count} for order_type, count in order_counts]}
+        except Exception as ERRO:
 
-        # Criando um dicionário para armazenar os resultados
-        return {"order_counts": [{"OrderTypeName": order_type, "Count": count} for order_type, count in order_counts]}
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f'Erro ao processar queryOrdersSummarized: {ERRO}'
+            )
 
     def queryOrders(self, orderFilter: FilterOrderSchema):
 
         query = (
-            self.db_session.query(Orders, Locations.LocationName, User.Username, OrderStatus.StatusName, OrderTypes.OrderTypeName)
-            .join(Locations, Orders.Location == Locations.LocationId)
-            .join(OrderTypes)
+            self.db_session.query(Order, Location.LocationName, User.Username, OrderStatus.StatusName, OrderType.OrderTypeName)
+            .join(Location, Order.LocationId == Location.LocationId)
+            .join(OrderType)
             .join(User)
             .join(OrderStatus)
             .options(
-                joinedload(Orders.location),
-                joinedload(Orders.order_type),
-                joinedload(Orders.created_by),
-                joinedload(Orders.status)
+                joinedload(Order.Location_rel),
+                joinedload(Order.OrderType),
+                joinedload(Order.created_by),
+                joinedload(Order.status)
             )
         )
 
         #Aplica os filtros que o usuario colocou, caso colocou.
         if orderFilter.id is not None:
-            query = query.filter(Orders.IdOrder==orderFilter.id)
+            query = query.filter(Order.OrderId==orderFilter.id)
 
-        if orderFilter.location is not None:
-            query = query.filter(Orders.Location==orderFilter.location)
+        if orderFilter.location_id is not None:
+            query = query.filter(Order.LocationId==orderFilter.location_id)
         
-        if orderFilter.order_type is not None:
-            query = query.filter(Orders.OrderType==orderFilter.order_type)
+        if orderFilter.order_type_id is not None:
+            query = query.filter(Order.OrderTypeId==orderFilter.order_type_id)
         
-        if orderFilter.created_by is not None:
-            query = query.filter(Orders.CreatedBy==orderFilter.created_by)
+        if orderFilter.created_by_id is not None:
+            query = query.filter(Order.UserId==orderFilter.created_by_id)
         
-        if orderFilter.status is not None:
-            query = query.filter(Orders.Status==orderFilter.status)
+        if orderFilter.status_id is not None:
+            query = query.filter(Order.OrderStatusId==orderFilter.status_id)
 
         if orderFilter.hotel_id is not None:
-            query = query.filter(Orders.HotelId==orderFilter.hotel_id)
+            query = query.filter(Order.HotelId==orderFilter.hotel_id)
 
         #Cria lista para serializar como JSON
         serialized_result = list()
@@ -87,7 +100,7 @@ class OrderMethods:
         for order, local, nome, status, order_type in query:
 
             serialized_order = {
-                'IdOrder': order.IdOrder,
+                'IdOrder': order.OrderId,
                 'Description': order.Description,
                 'Status': status,
                 'CreatedBy': nome,

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, status
-from src.schemas.oder import OrderSchema, FilterOrderSchema
+from src.schemas.order import OrderSchema, FilterOrderSchema
 from sqlalchemy.orm import Session
 from src.db_manager.depends import get_db_session
 from src.db_manager.methods.order_methods import OrderMethods
@@ -17,7 +17,7 @@ def list_orders(orderfilter: FilterOrderSchema = Depends(FilterOrderSchema), db_
 def insert_order(order: OrderSchema, db_session: Session = Depends(get_db_session)):
 
     orderCase = OrderMethods(db_session)
-    orderCase.insert_order(order)
+    orderCase.insertOrder(order)
     
     return JSONResponse(
         content={'msg':'success'},
