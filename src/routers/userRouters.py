@@ -7,7 +7,7 @@ from src.db_manager.methods.user_methods import UserMethod
 from src.schemas.user import UserSchema, UserSchemaForLogin
 from fastapi.security import OAuth2PasswordRequestForm
 
-router  = APIRouter(prefix=API_PREFIX)
+router  = APIRouter(prefix=API_PREFIX + '/user')
 
 @router.post('/register_user')
 def user_register(

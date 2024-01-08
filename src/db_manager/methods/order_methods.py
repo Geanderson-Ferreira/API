@@ -22,7 +22,7 @@ class OrderMethods:
                 Description=order.description,
                 UserId=order.created_by_id,
                 OrderStatusId=order.status_id,
-                HotelId=order.hotel_ids
+                HotelId=order.hotel_id
             )
         except Exception as erro:
             raise HTTPException(
@@ -71,7 +71,7 @@ class OrderMethods:
                 joinedload(Order.Location_rel),
                 joinedload(Order.OrderType),
                 joinedload(Order.created_by),
-                joinedload(Order.status)
+                joinedload(Order.OrderStatus)
             )
         )
 

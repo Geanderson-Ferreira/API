@@ -4,6 +4,11 @@ from datetime import datetime
 from src.db_manager.models import *
 from src.db_manager.config import DATABASE
 from src.db_manager.config import BASE as Base
+from passlib.context import CryptContext
+
+
+crypt_context = CryptContext(schemes=['sha256_crypt'])
+
 
 #Funcao que popula o Banco
 def populate():
@@ -73,12 +78,12 @@ def populate():
 ]
 
     user_data = [
-        {"Username": "user1", "Password": "password1", "FullName": "User One", "Email": "user1@example.com"},
-        {"Username": "user2", "Password": "password2", "FullName": "User Two", "Email": "user2@example.com"},
-        {"Username": "user3", "Password": "password3", "FullName": "User Three", "Email": "user3@example.com"},
-        {"Username": "user4", "Password": "password4", "FullName": "User Four", "Email": "user4@example.com"},
-        {"Username": "user5", "Password": "password5", "FullName": "User Five", "Email": "user5@example.com"},
-        {"Username": "user6", "Password": "password6", "FullName": "User Six", "Email": "user6@example.com"},
+        {"Username": "user1", "Password": crypt_context.hash("password1"), "FullName": "User One", "Email": "user1@example.com"},
+        {"Username": "user2", "Password": crypt_context.hash("password2"), "FullName": "User Two", "Email": "user2@example.com"},
+        {"Username": "user3", "Password": crypt_context.hash("password3"), "FullName": "User Three", "Email": "user3@example.com"},
+        {"Username": "user4", "Password": crypt_context.hash("password4"), "FullName": "User Four", "Email": "user4@example.com"},
+        {"Username": "user5", "Password": crypt_context.hash("password5"), "FullName": "User Five", "Email": "user5@example.com"},
+        {"Username": "user6", "Password": crypt_context.hash("password6"), "FullName": "User Six", "Email": "user6@example.com"},
     ]
 
     order_type_data = [
