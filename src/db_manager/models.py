@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from src.db_manager.config import BASE as Base
+import base64
 
 
 class Hotel(Base):
@@ -33,13 +34,6 @@ class Location(Base):
     Hotel = relationship('Hotel')
     LocationTypeName = relationship('LocationType', back_populates='location')
 
-
-import base64
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, LargeBinary
-from sqlalchemy.orm import relationship
-from datetime import datetime
-from src.db_manager.config import BASE as Base
-
 class Order(Base):
     __tablename__ = 'orders'
 
@@ -67,7 +61,6 @@ class Order(Base):
     def get_image_data(self):
         # Decode base64 string when retrieving from the database
         return base64.b64decode(self.ImageData)
-
 
 class User(Base):
     __tablename__ = 'users'

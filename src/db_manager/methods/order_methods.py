@@ -1,5 +1,5 @@
 from sqlalchemy.orm import joinedload, Session
-from sqlalchemy import func
+from sqlalchemy import func, update
 from src.db_manager.models import Order, Location, OrderStatus, OrderType, User
 from src.schemas.order import OrderSchema, FilterOrderSchema
 from fastapi.exceptions import HTTPException
@@ -11,7 +11,7 @@ class OrderMethods:
     def __init__(self, db_session: Session):
         self.db_session = db_session
     
-    def insertOrder(self, order: OrderSchema):
+    def insert_order(self, order: OrderSchema):
 
         try:
             order_to_insert = Order(
@@ -39,7 +39,7 @@ class OrderMethods:
                 detail='Erro de Integridade do Banco. Verifique os dados que esta tentando inserir.',
             )
 
-    def queryOrdersSummarized(self):
+    def query_orders_summarized(self):
 
         try:
             order_counts = (
@@ -59,7 +59,7 @@ class OrderMethods:
                 detail=f'Erro ao processar queryOrdersSummarized: {ERRO}'
             )
 
-    def queryOrders(self, orderFilter: FilterOrderSchema):
+    def query_orders(self, orderFilter: FilterOrderSchema):
 
         query = (
             self.db_session.query(Order, Location.LocationName, User.Username, OrderStatus.StatusName, OrderType.OrderTypeName)
@@ -111,3 +111,25 @@ class OrderMethods:
             serialized_result.append(serialized_order)
 
         return serialized_result
+    
+    def set_status(self, order_id: int, status_id: int):
+        try:
+ 
+            order_to_update = self.db_session.query(Order).filter(Order.OrderId == order_id).first()
+
+            if order_to_update is None:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f'Order with ID {order_id} not found.',
+                )
+
+
+            order_to_update.OrderStatusId = status_id
+            self.db_session.commit()
+
+        except Exception as error:
+
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f'Error updating order status: {error}',
+            )

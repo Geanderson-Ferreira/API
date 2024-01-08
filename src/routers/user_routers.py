@@ -10,19 +10,6 @@ from src.db_manager.depends import token_verifier
 
 router  = APIRouter(prefix=API_PREFIX + '/user')
 
-@router.post('/register_user', dependencies=[Depends(token_verifier)])
-def user_register(
-    user: UserSchema,
-    db_session: Session = Depends(get_db_session)
-    ):
-
-    u = UserMethod(db_session)
-    u.register_user(user=user)
-    
-    return JSONResponse(
-        content={'msg':'success'},
-        status_code=status.HTTP_201_CREATED
-    )
 
 @router.post('/login')
 def user_login(
@@ -42,5 +29,21 @@ def user_login(
     return JSONResponse(
         content=auth_data,
         status_code=status.HTTP_200_OK
+    )
+
+
+
+@router.post('/register-user', dependencies=[Depends(token_verifier)])
+def user_register(
+    user: UserSchema,
+    db_session: Session = Depends(get_db_session)
+    ):
+
+    u = UserMethod(db_session)
+    u.register_user(user=user)
+    
+    return JSONResponse(
+        content={'msg':'success'},
+        status_code=status.HTTP_201_CREATED
     )
 

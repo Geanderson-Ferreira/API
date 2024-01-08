@@ -1,10 +1,7 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 
-class Location(BaseModel):
-    location_type: str
-    order_type: int
-    image_data: str
-    description: str
-    created_by: int
-    status: int
+class LocationSchema(BaseModel):
+    location_type_id :int
+    location_name: str
+    floor: int
     hotel_id: int

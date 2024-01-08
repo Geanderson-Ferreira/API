@@ -32,7 +32,7 @@ class UserMethod:
                 detail='User Data Already Exists'
             )
     
-    def user_login(self, user: UserSchemaForLogin, expires_in: int = 30):
+    def user_login(self, user: UserSchemaForLogin, min_to_expire: int = 30):
         user_on_db = self.db_session.query(User).filter_by(Username=user.username).first()
 
         if user_on_db is None:
@@ -47,7 +47,7 @@ class UserMethod:
                 detail="Username or Password Invalid."
             )
         
-        exp = datetime.utcnow() + timedelta(minutes=expires_in)
+        exp = datetime.utcnow() + timedelta(minutes=min_to_expire)
 
         payload = {
             'sub' : user.username,
@@ -76,5 +76,3 @@ class UserMethod:
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid access token"
             )
-
-

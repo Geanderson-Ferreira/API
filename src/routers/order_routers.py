@@ -7,27 +7,34 @@ from fastapi.responses import JSONResponse
 from src.db_manager.config import API_PREFIX
 from src.db_manager.depends import token_verifier
 
-router = APIRouter(prefix=API_PREFIX, dependencies=[Depends(token_verifier)])
+router = APIRouter(prefix=API_PREFIX + '/order', dependencies=[Depends(token_verifier)])
 
 @router.get('/list-orders/')
 def list_orders(orderfilter: FilterOrderSchema = Depends(FilterOrderSchema), db_session: Session = Depends(get_db_session)):
-    orderCase = OrderMethods(db_session)
-    return orderCase.queryOrders(orderfilter)
+    
+    return OrderMethods(db_session).query_orders(orderfilter)
 
-@router.post('/insert-new-order/')
+@router.post('/insert-order/')
 def insert_order(order: OrderSchema, db_session: Session = Depends(get_db_session)):
 
-    orderCase = OrderMethods(db_session)
-    orderCase.insertOrder(order)
-    
+    OrderMethods(db_session).insert_order(order)
+
     return JSONResponse(
         content={'msg':'success'},
         status_code=status.HTTP_201_CREATED
     )
 
-@router.get('/orders_types_summarizeds/')
-def orders_types_summarizeds(db_session: Session = Depends(get_db_session)):
+@router.get('/orders-types-summarized/')
+def orders_types_summarized(db_session: Session = Depends(get_db_session)):
 
-    orderCase = OrderMethods(db_session)
-    return orderCase.queryOrdersSummarized()
+    return OrderMethods(db_session).query_orders_summarized()
+    
+@router.post('/set-order-status/')
+def set_order_status(order_id: int, set_to_status: int, db_session: Session = Depends(get_db_session)):
+    
+    OrderMethods(db_session).set_status(order_id, set_to_status)
 
+    return JSONResponse(
+        content={'msg':'success'},
+        status_code=status.HTTP_201_CREATED
+    )

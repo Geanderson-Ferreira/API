@@ -17,5 +17,5 @@ def token_verifier(db_session: Session = Depends(get_db_session),
                    token = Depends(oauth_scheme)
                    ):
     
-    uMethod = UserMethod(db_session)
-    uMethod.verify_token(token)
+    UserMethod(db_session).verify_token(token)
+    
