@@ -6,10 +6,11 @@ from src.db_manager.depends import get_db_session
 from src.db_manager.methods.user_methods import UserMethod
 from src.schemas.user import UserSchema, UserSchemaForLogin
 from fastapi.security import OAuth2PasswordRequestForm
+from src.db_manager.depends import token_verifier
 
 router  = APIRouter(prefix=API_PREFIX + '/user')
 
-@router.post('/register_user')
+@router.post('/register_user', dependencies=[Depends(token_verifier)])
 def user_register(
     user: UserSchema,
     db_session: Session = Depends(get_db_session)
@@ -43,12 +44,3 @@ def user_login(
         status_code=status.HTTP_200_OK
     )
 
-
-
-
-
-
-    return JSONResponse(
-        content={'msg':'success'},
-        status_code=status.HTTP_201_CREATED
-    )
