@@ -11,3 +11,5 @@ engine = create_engine(DATABASE, connect_args={"check_same_thread": False})
 admin = Admin(ENGINE)
 for model in models:
     admin.add_view(ModelView(model))
+
+
