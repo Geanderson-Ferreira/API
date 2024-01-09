@@ -7,6 +7,9 @@ from fastapi import FastAPI
 app = FastAPI()
 
 app.title = 'Projeto App Care'
+@app.get('/')
+def health_check():
+    return {"HERE WE ARE!"}
 
 for router in routers: app.include_router(router)
 
