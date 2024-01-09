@@ -18,3 +18,12 @@ def insert_location(location: LocationSchema, db_session: Session = Depends(get_
         content={'msg':'success'},
         status_code=status.HTTP_201_CREATED
     )
+@router.post('/delete-location/')
+def delete_location(location_id: int, db_session: Session = Depends(get_db_session)):
+    
+    LocationMethods(db_session).delete_location(location_id)
+
+    return JSONResponse(
+        content={'msg':'success'},
+        status_code=status.HTTP_201_CREATED
+    )

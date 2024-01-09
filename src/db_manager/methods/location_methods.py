@@ -24,4 +24,14 @@ class LocationMethods:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail='Erro de Integridade do Banco. Verifique os dados que esta tentando inserir.',
             )
-    
+    def delete_location(self, location_id: int):
+        location_to_delete = self.db_session.query(Location).filter(Location.LocationId == location_id).first()
+        
+        if location_to_delete:
+            self.db_session.delete(location_to_delete)
+            self.db_session.commit()
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f'Location with ID {location_id} not found.',
+            )
