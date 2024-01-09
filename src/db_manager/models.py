@@ -1,9 +1,16 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from src.db_manager.config import BASE as Base
 import base64
 
+
+# Define the association table for user access control
+user_hotel_association = Table(
+    'user_hotel_association', Base.metadata,
+    Column('user_id', Integer, ForeignKey('users.UserId')),
+    Column('hotel_id', Integer, ForeignKey('hotels.HotelId'))
+)
 
 class Hotel(Base):
     __tablename__ = 'hotels'
@@ -12,6 +19,9 @@ class Hotel(Base):
     HotelName = Column(String, unique=True, nullable=False)
     locations = relationship('Location', back_populates='Hotel')
     orders = relationship('Order', back_populates='Hotel') 
+
+    users = relationship('User', secondary=user_hotel_association, back_populates='hotels')
+
 
 class LocationType(Base):
     __tablename__ = 'location_types'
@@ -73,6 +83,8 @@ class User(Base):
 
     CreatedAt = Column(DateTime, default=datetime.utcnow)
     orders = relationship('Order', back_populates='created_by')
+    hotels = relationship('Hotel', secondary=user_hotel_association, back_populates='users')
+
 
 class OrderType(Base):
     __tablename__ = 'order_types'

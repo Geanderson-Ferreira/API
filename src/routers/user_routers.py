@@ -47,3 +47,20 @@ def user_register(
         status_code=status.HTTP_201_CREATED
     )
 
+@router.post('/hotel-assignment', dependencies=[Depends(token_verifier)])
+def hotel_assignment(
+    user_id : int,
+    hotel_id : int,
+    db_session: Session = Depends(get_db_session)
+    ):
+    
+    UserMethod(db_session).hotel_assignment(user_id, hotel_id)
+
+@router.post('/remove-hotel-assignment', dependencies=[Depends(token_verifier)])
+def hotel_assignment(
+    user_id : int,
+    hotel_id : int,
+    db_session: Session = Depends(get_db_session)
+    ):
+    
+    UserMethod(db_session).remove_hotel_assignment(user_id, hotel_id)

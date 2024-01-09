@@ -78,7 +78,7 @@ def populate():
 ]
 
     user_data = [
-        {"Username": "user1", "Password": crypt_context.hash("password1"), "FullName": "User One", "Email": "user1@example.com"},
+        {"Username": "admin", "Password": crypt_context.hash("admin"), "FullName": "Admin", "Email": "admin@admin.com"},
         {"Username": "user2", "Password": crypt_context.hash("password2"), "FullName": "User Two", "Email": "user2@example.com"},
         {"Username": "user3", "Password": crypt_context.hash("password3"), "FullName": "User Three", "Email": "user3@example.com"},
         {"Username": "user4", "Password": crypt_context.hash("password4"), "FullName": "User Four", "Email": "user4@example.com"},
