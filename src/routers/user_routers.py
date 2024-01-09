@@ -24,7 +24,7 @@ def user_login(
         password=request_form_user.password
     )
 
-    auth_data = uMethod.user_login(USchema, 30)
+    auth_data = uMethod.user_login(USchema, 1)
 
     return JSONResponse(
         content=auth_data,

@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from src.admin_way.starlette import admin
 from src.routers import routers
+from src.db_manager.depends import token_verifier
 
 from fastapi import FastAPI
 
@@ -13,4 +14,7 @@ def health_check():
 
 for router in routers: app.include_router(router)
 
-admin.mount_to(app)
+
+@app.get('/admin', dependencies=[Depends(token_verifier)])
+def admin_page():
+    return admin.mount_to(app)

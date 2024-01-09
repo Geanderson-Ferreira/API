@@ -8,8 +8,6 @@ from fastapi import status
 from datetime import datetime, timedelta
 from src.db_manager.config import SECRET_KEY, ALGORITHM
 from jose import jwt, JWTError
-from fastapi.responses import JSONResponse
-from sqlalchemy import delete
 
 crypt_context = CryptContext(schemes=['sha256_crypt'])
 
