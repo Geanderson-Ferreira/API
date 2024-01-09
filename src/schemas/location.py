@@ -5,3 +5,6 @@ class LocationSchema(BaseModel):
     location_name: str
     floor: int
     hotel_id: int
+
+class LocationTypeSchema(BaseModel):
+    location_type_name: str
