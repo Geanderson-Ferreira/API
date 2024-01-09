@@ -1,7 +1,7 @@
 from sqlalchemy.orm import joinedload, Session
 from sqlalchemy import func, update
 from src.db_manager.models import Order, Location, OrderStatus, OrderType, User
-from src.schemas.order import OrderSchema, FilterOrderSchema
+from src.schemas.order import OrderSchema, FilterOrderSchema, OrderTypeSchema
 from fastapi.exceptions import HTTPException
 from sqlalchemy.exc import IntegrityError
 from fastapi import status
@@ -132,4 +132,29 @@ class OrderMethods:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f'Error updating order status: {error}',
+            )
+        
+    def insert_order_type(self, order_type: OrderTypeSchema):
+        order_type_to_insert = OrderType(
+            OrderTypeName=order_type.order_type_name
+        )
+        try:
+            self.db_session.add(order_type_to_insert)
+            self.db_session.commit()
+        except IntegrityError:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail='Erro de Integridade do Banco. Verifique os dados que esta tentando inserir.',
+            )
+        
+    def delete_order_type(self, order_type_id: int):
+        order_type_to_delete = self.db_session.query(OrderType).filter(OrderType.OrderTypeId == order_type_id).first()
+        
+        if order_type_to_delete:
+            self.db_session.delete(order_type_to_delete)
+            self.db_session.commit()
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f'OrderType with ID {order_type_id} not found.',
             )

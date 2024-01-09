@@ -9,7 +9,7 @@ from src.db_manager.depends import token_verifier
 
 router = APIRouter(prefix=API_PREFIX + '/hotel', dependencies=[Depends(token_verifier)])
 
-@router.post('/insert-hotel/')
+@router.post('/insert-hotel')
 def insert_hotel(hotel: HotelSchema, db_session: Session = Depends(get_db_session)):
 
     HotelMethods(db_session).insert_location(hotel)
@@ -18,7 +18,7 @@ def insert_hotel(hotel: HotelSchema, db_session: Session = Depends(get_db_sessio
         content={'msg':'success'},
         status_code=status.HTTP_201_CREATED
     )
-@router.post('/delete-hotel/')
+@router.post('/delete-hotel')
 def delete_hotel(hotel_id: int, db_session: Session = Depends(get_db_session)):
     
     HotelMethods(db_session).delete_hotel(hotel_id)

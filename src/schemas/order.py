@@ -24,3 +24,6 @@ class FilterOrderSchema(BaseModel):
     def convert_optional_fields_to_none(cls, value):
         return None if not value else value
         #return value if value is not None and value != "" else None
+
+class OrderTypeSchema(BaseModel):
+    order_type_name : str

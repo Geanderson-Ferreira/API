@@ -9,7 +9,7 @@ from src.db_manager.depends import token_verifier
 
 router = APIRouter(prefix=API_PREFIX + '/location', dependencies=[Depends(token_verifier)])
 
-@router.post('/insert-location/')
+@router.post('/insert-location')
 def insert_location(location: LocationSchema, db_session: Session = Depends(get_db_session)):
 
     LocationMethods(db_session).insert_location(location)
@@ -18,7 +18,7 @@ def insert_location(location: LocationSchema, db_session: Session = Depends(get_
         content={'msg':'success'},
         status_code=status.HTTP_201_CREATED
     )
-@router.post('/delete-location/')
+@router.post('/delete-location')
 def delete_location(location_id: int, db_session: Session = Depends(get_db_session)):
     
     LocationMethods(db_session).delete_location(location_id)
@@ -28,7 +28,7 @@ def delete_location(location_id: int, db_session: Session = Depends(get_db_sessi
         status_code=status.HTTP_201_CREATED
     )
 
-@router.post('/insert-location-type/')
+@router.post('/insert-location-type')
 def insert_location_type(location_type: LocationTypeSchema, db_session: Session = Depends(get_db_session)):
 
     LocationMethods(db_session).insert_location_type(location_type)
@@ -38,7 +38,7 @@ def insert_location_type(location_type: LocationTypeSchema, db_session: Session 
         status_code=status.HTTP_201_CREATED
     )
 
-@router.post('/delete-location-type/')
+@router.post('/delete-location-type')
 def delete_location_type(location_type_id: int, db_session: Session = Depends(get_db_session)):
     
     LocationMethods(db_session).delete_location_type(location_type_id)

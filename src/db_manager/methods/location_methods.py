@@ -58,5 +58,5 @@ class LocationMethods:
         else:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f'Location with ID {location_type_id} not found.',
+                detail=f'LocationType with ID {location_type_id} not found.',
             )
